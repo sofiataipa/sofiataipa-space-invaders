@@ -389,14 +389,14 @@ function animate() {
             if(dist - (enemy.radius + projectile.radius) < 1) {
 
                 // Shrink if big enough
-                if(enemy.radius - 10 > 8 ) {
+                if(enemy.radius - 20 > 10 ) {
                     updateScore(scoreElement, Math.round(3*enemy.radius));
 
                     // Interpolate
                     gsap.to(enemy, {
-                        radius: enemy.radius - 10
+                        radius: enemy.radius - 15
                     });
-                    //enemy.radius -= 10;
+
                     setTimeout(() => { 
                         projectiles.splice(j, 1);
                     }, 0);  
