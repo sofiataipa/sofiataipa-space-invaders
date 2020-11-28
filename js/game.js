@@ -136,6 +136,7 @@ class Enemy {
         c.fillStyle = this.color; //'rgba(0,0,0,0)';
         //c.strokeStyle = this.color;
         //c.stroke();
+        
         c.fill();
     }
 
