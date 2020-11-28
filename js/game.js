@@ -397,7 +397,7 @@ startGameBtn.addEventListener('click', (event) => {
     initGame();
 });
 
-startGameBtn.addEventListener('touch', (event) => {
+startGameBtn.addEventListener('touchmove', (event) => {
     initGame();
 });
 
