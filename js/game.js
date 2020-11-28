@@ -400,9 +400,10 @@ let listener = function (event){
     player.update(event);
 }
 
-startGameBtn.addEventListener('click', (event) => {
+startGameBtn.addEventListener('touchstart', (event) => {
     initGame();
 });
 
-
-
+startGameBtn.addEventListener('click', (event) => {
+    initGame();
+});
