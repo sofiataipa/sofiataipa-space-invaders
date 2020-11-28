@@ -30,8 +30,8 @@ class Player {
         this.w = w;
         this.h = h;
         this.color = color;
-        this.image = new Image;
-        this.image.src = './assets/Rapaz parte de cima.png';
+        // this.image = new Image;
+        // this.image.src = './assets/Rapaz parte de cima.png';
         // c.webkitImageSmoothingEnabled = false;
         // c.mozImageSmoothingEnabled = false;
         // c.msImageSmoothingEnabled = false;
@@ -74,15 +74,14 @@ class Projectile {
         this.color = color;
         this.velocity = velocity;
         this.pastY = [];
+        this.image = new Image;
+        this.image.src = './assets/Logo 5.png';
+        this.w = this.radius * 0.7
     }
 
     draw() {
         c.beginPath();
-        c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
-        c.fillStyle = this.color;
-        c.fill();
 
-        // Create a trail effect
         let a = 0.7;
         for(let i=this.pastY.length; i>=0; i--) {
             if(a > 0) {
@@ -99,6 +98,18 @@ class Projectile {
                 this.pastY.splice(i, 1);
             }
         }
+        c.closePath();
+
+        c.beginPath();
+
+        c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
+        c.fillStyle = this.color;
+        c.fill();
+
+        c.drawImage(this.image, this.x-this.w, this.y-this.w, this.w*2, this.w*2);
+        // Create a trail effect
+        c.closePath();
+        
     }
 
     update() {
@@ -122,9 +133,9 @@ class Enemy {
     draw() {
         c.beginPath();
         c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
-        c.fillStyle = 'rgba(0,0,0,0)';
-        c.strokeStyle = this.color;
-        c.stroke();
+        c.fillStyle = this.color; //'rgba(0,0,0,0)';
+        //c.strokeStyle = this.color;
+        //c.stroke();
         c.fill();
     }
 
@@ -198,8 +209,9 @@ let playerY = canvas.height - (playerH);
 let playerColor = 'white';
 
 // Projectile variables
-let projectileRadius = 5;
-let projectileColor = 'rgb(150, 40, 40)';
+let projectileRadius = 8;
+//let projectileColor = 'rgb(150, 40, 40)';
+let projectileColor = 'rgb(200, 220, 220)';
 let projectileVelocity = 5;
 
 // Particle variables
