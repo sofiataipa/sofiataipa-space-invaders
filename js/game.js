@@ -238,7 +238,8 @@ function initGame() {
 function endGame() {
     clearInterval(spawnEnemiesInterval);
     clearInterval(spawnProjectilesInterval);
-    window.removeEventListener('click', listener, false)
+    window.removeEventListener('click', listener, false);
+    window.removeEventListener('touchstart', listener, false);
     modalElement.addClass('d-flex');
     modalElement.removeClass('d-none');
     canvas.style.display = "none";
@@ -393,6 +394,10 @@ let listener = function (event){
 }
 
 startGameBtn.addEventListener('click', (event) => {
+    initGame();
+});
+
+startGameBtn.addEventListener('touch', (event) => {
     initGame();
 });
 
