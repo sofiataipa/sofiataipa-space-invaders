@@ -212,12 +212,14 @@ let projectiles = [];
 let enemies = [];
 let particles  = [];
 // let touchLocation;
+
 function initGame() {  
     player = new Player(playerX, playerY, playerW, playerH, playerColor);
     projectiles = [];
     enemies = [];
     particles  = [];
     score = 0;
+    currentLevel = 1;
     updateScore(scoreElement, 0);
     updateScore(lastScoreElement, 0);
 
@@ -226,7 +228,8 @@ function initGame() {
 
     animate();
     
-    spawnEnemiesInterval = setInterval(spawnEnemies, 1000)
+    updateEnemyInterval();
+
     modalElement.removeClass('d-flex');
     modalElement.addClass('d-none');
     setTimeout(() => {
@@ -240,7 +243,7 @@ function initGame() {
             
         // })
     }, 10);
-    spawnProjectilesInterval = setInterval(spawnProjectiles, 500);
+    spawnProjectilesInterval = setInterval(spawnProjectiles, 300);
 }
 
 function endGame() {
@@ -261,6 +264,22 @@ function updateScore(scoreEl, value) {
     scoreEl.html(score);
 }
 
+function updateLevel() {
+    let nextLevelScore = Math.round(1000 * Math.pow(currentLevel, 1.5));
+    if(score > nextLevelScore) {
+        currentLevel++;
+        levelElement.html(currentLevel);
+        updateEnemyInterval();
+    }
+}
+
+function updateEnemyInterval() {
+    clearInterval(spawnEnemiesInterval);
+    let interval = (1500*Math.pow(0.9, currentLevel));
+    console.log(interval);
+    spawnEnemiesInterval = setInterval(spawnEnemies, interval > 300 ? interval : 300);
+}
+
 let spawnEnemiesInterval;
 // Spawn enemies
 function spawnEnemies() {
@@ -270,8 +289,9 @@ function spawnEnemies() {
         let enemyColor = `hsl(${Math.random()*360}, 40%, 50%)`;
         let enemyVelocity = {
             x: 0,
-            y: 2
+            y: Math.min((2*Math.pow(1.1, currentLevel)), 6)
         };
+        console.log("vel: " + enemyVelocity.y);
         enemies.push(new Enemy(enemyX, enemyY, enemyRadius, enemyColor, enemyVelocity));
 }
 
@@ -285,7 +305,8 @@ function spawnProjectiles() {
 
 let animationId;
 let score = 0;
-let level = 1;
+let currentLevel = 1;
+
 // Animates frame by frame
 function animate() {
     animationId = requestAnimationFrame(animate);
@@ -300,7 +321,7 @@ function animate() {
     c.fillStyle = 'rgba(0, 0, 0)'; 
     c.fillRect(0, 0, canvas.width, canvas.height);
     
-    //updateLevel();
+    updateLevel();
 
     player.draw();
 
@@ -394,7 +415,6 @@ function animate() {
         }
     }
 }
-
 
 let listener = function (event){
     player.update(event);
