@@ -125,7 +125,7 @@ class Enemy {
     constructor(x, y, radius, color, velocity) {
         this.x = x;
         this.y = y;
-        this.radius = Math.random() * (radius - 8) + 8;
+        this.radius = Math.random() * (radius - 10) + 10;
         this.color = color;
         this.velocity = velocity;
     }
@@ -136,7 +136,7 @@ class Enemy {
         c.fillStyle = this.color; //'rgba(0,0,0,0)';
         //c.strokeStyle = this.color;
         //c.stroke();
-        
+
         c.fill();
     }
 
@@ -296,16 +296,16 @@ function updateEnemyInterval() {
 let spawnEnemiesInterval;
 // Spawn enemies
 function spawnEnemies() {
-        let enemyRadius = 30; 
-        let enemyX = Math.random() * (canvas.width - 2*enemyRadius*2) + enemyRadius*2; //canvas.width/2
-        let enemyY = enemyRadius*2;
+        let maxEnemyRadius = 50; 
+        let enemyX = Math.random() * (canvas.width - 2*maxEnemyRadius*2) + maxEnemyRadius*2; //canvas.width/2
+        let enemyY = maxEnemyRadius*2;
         let enemyColor = `hsl(${Math.random()*360}, 40%, 50%)`;
         let enemyVelocity = {
             x: 0,
             y: Math.min((2*Math.pow(1.1, currentLevel)), 6)
         };
         console.log("vel: " + enemyVelocity.y);
-        enemies.push(new Enemy(enemyX, enemyY, enemyRadius, enemyColor, enemyVelocity));
+        enemies.push(new Enemy(enemyX, enemyY, maxEnemyRadius, enemyColor, enemyVelocity));
 }
 
 
