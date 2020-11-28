@@ -230,8 +230,7 @@ function initGame() {
     modalElement.addClass('d-none');
     setTimeout(() => {
         window.addEventListener('mousemove', listener, false);
-        window.addEventListener('touchmove', listener, false);
-        
+        window.addEventListener('touchstart', listener, false);
     }, 10);
     spawnProjectilesInterval = setInterval(spawnProjectiles, 500);
 }
