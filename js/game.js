@@ -225,7 +225,6 @@ let projectiles = [];
 let enemies = [];
 let particles  = [];
 let propostas = [
-    'Frase inicial' ,
     'Exemplo proposta 1' , 
     'Exemplo proposta 2' , 
     'Exemplo proposta 3' , 
@@ -233,10 +232,26 @@ let propostas = [
     'Exemplo proposta 5'
 ];
 
-let propostasShuffled = [];
+let propostasShuffled = shuffleArray(propostas);;
 let propostasIndex = 0;
 // First text always first
-propostasElement.html(propostas[propostasIndex]);
+// propostasElement.html(propostas[propostasIndex]);
+
+let palavras = [
+    'PeliCuf' , 'LIA' , 'Workshops' , 'Palestras' , 'Research4U' , 'Proatividade' ,
+    '+Estágios' , '+Congressos' , 'Piati' , '+Parcerias ' , 'Med On Tour' , 'Ser Abrigo' , 
+    'B.A.' , 'Expansão' , 'Sunsets' , 'SCOPE' , 'SCORE' , 'PET/T4PE' , 
+    'Erasmus+' , 'Buddy' , 'Quizzes' , 'Soft Skills' , 'Bolsas' , 'Literatura Ativa' , 
+    'Vendas Online' , 'Camisolas SBV' , '+Representação;' , 'SIGMA' , 'Sistema de Pontos' , 'APP AEFCM' , 
+    'Proximidade' , 'COVID-19' , 'NMS Photography' , 'Podcast' , 'Desafios' , 'Concursos' , 
+    'Stand Up' , 'Concertos' , 'Bares' , 'Discotecas' , 'Arraial' , 'Film Club' , 
+    'Disponibilidade' , 'Caixa de Dúvidas' , 'SASNOVA' , 'Soft Skills' , 'Torneios' , 'Programação' , 
+    'Workshops' , 'Apoio 24/7' , 'Parcerias Desporto' , 'Proximidade' , 'Transparência' , 'Debate' , 
+];
+
+let palavrasShuffled = shuffleArray(palavras);
+let palavrasIndex = 0;
+
 
 function initGame() {  
     player = new Player(playerX, playerY, playerW, playerH, playerColor);
@@ -252,14 +267,18 @@ function initGame() {
     canvas.style.display = "";
     stats.show();
 
-    shuffledArray = shuffleArray(propostas);
-    propostasElement.html(shuffledArray[propostasIndex]);
+   
+    propostasElement.html(propostasShuffled[propostasIndex]);
     // if(propostasIndex == 0) {
     //     //tirar link maybe
     // }
     propostasIndex++;
-    
-    if(propostasIndex == shuffledArray.length) {
+    if(propostasIndex == propostasShuffled.length) {
+        propostasIndex = 0;
+    }
+
+    palavrasIndex++; 
+    if(propostasIndex == propostasShuffled.length) {
         propostasIndex = 0;
     }
 
@@ -299,7 +318,7 @@ function shuffleArray(array) {
     let indexes = []
     let shuffledArray = [];
 
-    for(let i=1; i < array.length-1; i++) {
+    for(let i=0; i < array.length-1; i++) {
         indexes.push(i); 
     }
 
@@ -308,7 +327,7 @@ function shuffleArray(array) {
 
     // Gera um indice aleatório, adiciona a carta do deck ao
     // shuffled deck e elimina esse índice das opções
-    for(let i=1; i < array.length-1; i++) {
+    for(let i=0; i < array.length-1; i++) {
         let index = Math.floor(Math.random() * indexes.length);
         shuffledArray.push(array[indexes[index]]);
         indexes.splice(index, 1);
