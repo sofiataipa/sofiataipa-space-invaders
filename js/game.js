@@ -55,9 +55,12 @@ class Player {
     }
 
     update(e) {
-       
+        if(e.targetTouches !== undefined ) {
+            this.x = e.targetTouches[0].pageX;
+        }
+        
         if(e.clientX > this.w/2 && e.clientX < canvas.width - this.w/2 ) {
-            this.x = e.clientX;
+            this.x = e.clientX;  
         } 
     }
 }
@@ -189,9 +192,7 @@ class Particle {
 
 // Player variables
 let playerW = parseFloat(playerElement.css('width'));
-console.log(playerElement.css('width'));
 let playerH = parseFloat(playerElement.css('height'));
-console.log(playerElement.css('height'));
 let playerX = canvas.width/2;
 let playerY = canvas.height - (playerH);
 let playerColor = 'white';
@@ -210,7 +211,7 @@ let player = new Player(playerX, playerY, playerW, playerH, playerColor);
 let projectiles = [];
 let enemies = [];
 let particles  = [];
-
+// let touchLocation;
 function initGame() {  
     player = new Player(playerX, playerY, playerW, playerH, playerColor);
     projectiles = [];
@@ -231,6 +232,13 @@ function initGame() {
     setTimeout(() => {
         window.addEventListener('mousemove', listener, false);
         window.addEventListener('touchmove', listener, false);
+        // window.addEventListener('touchmove', function(event) {
+        //     touchLocation = event.targetTouches[0].pageX;
+        //     console.log(touchLocation);
+        //     player.update(event);
+
+            
+        // })
     }, 10);
     spawnProjectilesInterval = setInterval(spawnProjectiles, 500);
 }
@@ -390,14 +398,11 @@ function animate() {
 
 let listener = function (event){
     player.update(event);
-   
 }
 
 startGameBtn.addEventListener('click', (event) => {
     initGame();
 });
 
-startGameBtn.addEventListener('touchmove', (event) => {
-    initGame();
-});
+
 
