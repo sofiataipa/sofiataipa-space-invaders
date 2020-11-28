@@ -3,7 +3,7 @@
 
     <head>
         <title>Space Invaders</title>
-  
+        <meta charset="UTF-8">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" 
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
         <link rel="stylesheet" href="./css/main.css"/>
@@ -11,18 +11,31 @@
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
     </head>
 
-    <body>
-        <article class="position-fixed text-muted m-3 user-select-none">
-            <span>Pontuação: </span><span id="score">0</span>
+    <body scroll="no">
+        <article class="position-fixed m-3 user-select-none" id="stats">
+            <section class="text-light bigger" >
+                <span>Nível </span><span id="level">1</span>
+            </section>
+            <section class="text-muted">
+                <span>Pontuação: </span><span id="score">0</span>
+            </section>
         </article>
         <article class="position-fixed inset-0 d-flex justify-content-center align-items-center" id="modal">
-                <section class="bg-light w-75 py-4 rounded">
-                    <div class="text-center">
-                        <h1 class="mb-0 font-weight-bold" id="lastScore">0</h1>
-                        <p class="">Pontos</p>
-                        <button class="btn btn-outline-info w-50">Novo Jogo</button>
+                <section class="bg-light w-75 py-4 rounded text-center">
+                    <div class="">
+                        <img src="./assets/Logo 6.png" id="lista" class="mb-4"/>
                     </div>
+                    <div class="">
+                        <h3 class="mb-0 font-weight-bold" id="lastScore">0</h3>
+                        <p class="">Pontos</p>
+                        <button class="btn btn-outline-info w-25">Novo Jogo</button>
+                        <p class="font-weight-normal mt-3 mb-0">Exemplo de proposta: colocar texto aqui!</p>
+                    </div>
+                   
                 </section>            
+        </article>
+        <article>
+            <img src="./assets/Rapaz parte de cima.png" id="player"/>
         </article>
         <canvas> </canvas>
         

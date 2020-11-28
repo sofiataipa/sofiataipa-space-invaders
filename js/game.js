@@ -1,38 +1,64 @@
-//console.log(gsap);
 // Game setup
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d'); // Context
 
+
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
+const stats = $('#stats');
 const scoreElement = $('#score');
+const levelElement = $('#level');
 const lastScoreElement = $('#lastScore');
 const startGameBtn = $('.btn')[0];
 const modalElement = $('#modal');
 
+
+const playerElement = $("#player");
+playerElement.hide();
+stats.hide();
+
 //modalElement.style.display = 'none !important';
-//console.log(modalElement);
 //const modalElement = document.querySelector('#modal');
 
 
 // Player
 class Player {
-    constructor(x, y, radius, color) {
+    constructor(x, y, w, h, color) {
         this.x = x;
         this.y = y;
-        this.radius = radius;
+        this.w = w;
+        this.h = h;
         this.color = color;
+        this.image = new Image;
+        this.image.src = './assets/Rapaz parte de cima.png';
+        // c.webkitImageSmoothingEnabled = false;
+        // c.mozImageSmoothingEnabled = false;
+        // c.msImageSmoothingEnabled = false;
+        // c.imageSmoothingEnabled = false;
     }
+
     draw() {
-        c.beginPath();
-        c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
-        c.fillStyle = this.color;
-        c.fill();
+        playerElement.show();
+        playerElement[0].style.left = `${this.x}px`;
+        playerElement[0].style.top = `${this.y+this.h/2}px`;
+        
+        // c.beginPath();
+        // //c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
+        // c.rect(this.x-this.w/2, this.y, this.w, this.h);
+        // //c.drawImage(this.image, this.x-this.w/2, this.y, this.w, this.h);
+        // c.strokeStyle = this.color;
+        // c.stroke();
+        // c.fillStyle = 'rgba(0,0,0,0)';
+        // //c.fillStyle = this.color;
+        // c.fill();
     }
 
     update(e) {
-        this.x = e.clientX;
+       
+        if(e.clientX > this.w/2 && e.clientX < canvas.width - this.w/2 ) {
+            this.x = e.clientX;
+        } 
     }
 }
 
@@ -119,7 +145,7 @@ class Particle {
             y: (Math.random() - 0.5) * (Math.random() * (6 - 0) + 0)
         };
         this.alpha = 1;
-        this.pastXY = [];
+        //this.pastXY = [];
     }
 
     draw() {
@@ -128,26 +154,24 @@ class Particle {
         c.beginPath();
         c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
         c.fillStyle = this.color;
-        //c.strokeStyle = this.color;
-        //c.stroke();
         c.fill();
 
-        // Trail effect
-        let a = 0.7;
-        for(let i=this.pastXY.length-1; i>=0; i--) {
-            if(a > 0) {
-                let r = parseInt(this.color.slice(1, 3), 16);
-                let g = parseInt(this.color.slice(3, 5), 16);
-                let b = parseInt(this.color.slice(5, 7), 16);
-                c.fillStyle = `rgba(${r},${g},${b}, ${a})`;
-                c.arc(this.pastXY[i][0], this.pastXY[i][1], this.radius, 0, Math.PI*2, false); 
-                a -= 0.08;
-                c.fill();
-            }
-            else {
-                this.pastXY.splice(i, 1);
-            }
-        }
+        // // Trail effect
+        // let a = 0.7;
+        // for(let i=this.pastXY.length-1; i>=0; i--) {
+        //     if(a > 0) {
+        //         let r = parseInt(this.color.slice(1, 3), 16);
+        //         let g = parseInt(this.color.slice(3, 5), 16);
+        //         let b = parseInt(this.color.slice(5, 7), 16);
+        //         c.fillStyle = `rgba(${r},${g},${b}, ${a})`;
+        //         c.arc(this.pastXY[i][0], this.pastXY[i][1], this.radius, 0, Math.PI*2, false); 
+        //         a -= 0.08;
+        //         c.fill();
+        //     }
+        //     else {
+        //         this.pastXY.splice(i, 1);
+        //     }
+        // }
         c.restore();
     }
 
@@ -158,15 +182,18 @@ class Particle {
         this.x = this.x + this.velocity.x;
         this.y = this.y + this.velocity.y;
         this.alpha -= 0.01;
-        this.pastXY.push([this.x, this.y]);
+        //this.pastXY.push([this.x, this.y]);
     }
 }
 
 
 // Player variables
-let playerRadius = 20;
+let playerW = parseFloat(playerElement.css('width'));
+console.log(playerElement.css('width'));
+let playerH = parseFloat(playerElement.css('height'));
+console.log(playerElement.css('height'));
 let playerX = canvas.width/2;
-let playerY = canvas.height - (playerRadius*2);
+let playerY = canvas.height - (playerH);
 let playerColor = 'white';
 
 // Projectile variables
@@ -179,20 +206,44 @@ let numParticlesRatio = 2;
 let particleRadius = 2;
 
 // Game variables
-let player = new Player(playerX, playerY, playerRadius, playerColor);
+let player = new Player(playerX, playerY, playerW, playerH, playerColor);
 let projectiles = [];
 let enemies = [];
 let particles  = [];
 
-function init() {
-    player = new Player(playerX, playerY, playerRadius, playerColor);
+function initGame() {  
+    player = new Player(playerX, playerY, playerW, playerH, playerColor);
     projectiles = [];
     enemies = [];
     particles  = [];
     score = 0;
     updateScore(scoreElement, 0);
     updateScore(lastScoreElement, 0);
-};
+
+    canvas.style.display = "";
+    stats.show();
+
+    animate();
+    
+    spawnEnemiesInterval = setInterval(spawnEnemies, 1000)
+    modalElement.removeClass('d-flex');
+    modalElement.addClass('d-none');
+    setTimeout(() => {
+        window.addEventListener('mousemove', listener, false)
+    }, 10);
+    spawnProjectilesInterval = setInterval(spawnProjectiles, 500);
+}
+
+function endGame() {
+    clearInterval(spawnEnemiesInterval);
+    clearInterval(spawnProjectilesInterval);
+    window.removeEventListener('click', listener, false)
+    modalElement.addClass('d-flex');
+    modalElement.removeClass('d-none');
+    canvas.style.display = "none";
+    playerElement.hide();
+    stats.hide();
+}
 
  // Increase score
 function updateScore(scoreEl, value) {
@@ -224,13 +275,23 @@ function spawnProjectiles() {
 
 let animationId;
 let score = 0;
+let level = 1;
 // Animates frame by frame
 function animate() {
     animationId = requestAnimationFrame(animate);
+
+    // Resizing frame
+    if(canvas.width !== innerWidth || canvas.height !== innerHeight){
+        canvas.width = innerWidth;
+        canvas.height = innerHeight;
+    }  
+    
     // Cleans background
     c.fillStyle = 'rgba(0, 0, 0)'; 
     c.fillRect(0, 0, canvas.width, canvas.height);
     
+    updateLevel();
+
     player.draw();
 
     for(let i in particles) {
@@ -267,7 +328,8 @@ function animate() {
 
         // Collision detection (player and enemy) - Game over
         let dist = Math.hypot(player.x - enemy.x, player.y - enemy.y); 
-        if(dist - (enemy.radius + player.radius) < 0) {
+        if( dist - (enemy.radius) <= 0 ||  
+            ( (enemy.y > player.y) && (enemy.x > player.x - player.w/4)  && (enemy.x < player.x + player.w/4) ) ) {
             cancelAnimationFrame(animationId);
             updateScore(lastScoreElement, 0);
             modalElement.addClass('d-flex');
@@ -318,16 +380,11 @@ function animate() {
             // }, 0); 
             cancelAnimationFrame(animationId);
             updateScore(lastScoreElement, 0);
-            modalElement.addClass('d-flex');
-            modalElement.removeClass('d-none');
             endGame();
         }
     }
 }
 
-function endGame() {
-    clearInterval(spawnEnemiesInterval);
-    window.removeEventListener('click', listener, false)}
 
 let listener = function (event){
     player.update(event);
@@ -335,15 +392,6 @@ let listener = function (event){
 }
 
 startGameBtn.addEventListener('click', (event) => {
-    init();
-    animate();
-    //spawnEnemies();
-    spawnEnemiesInterval = setInterval(spawnEnemies, 1000)
-    modalElement.removeClass('d-flex');
-    modalElement.addClass('d-none');
-    setTimeout(() => {
-        window.addEventListener('mousemove', listener, false)
-    }, 10);
-    spawnProjectilesInterval = setInterval(spawnProjectiles, 500);
+    initGame();
 });
 

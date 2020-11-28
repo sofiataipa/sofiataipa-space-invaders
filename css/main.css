@@ -2,6 +2,7 @@ body {
     margin: 0;
     font-family: 'Montserrat', sans-serif; 
     background: black; 
+    overflow: hidden;
 }
 
 .inset-0 {
@@ -13,4 +14,19 @@ body {
 
 button {
     border-radius: 40px !important;
+}
+
+#lista {
+    width: 140px;
+}
+
+#player {
+  height: 100px;
+  position: absolute;
+  margin-top: -50px;
+  margin-left: -50px;
+}
+
+.bigger {
+    font-size: 18px;
 }
