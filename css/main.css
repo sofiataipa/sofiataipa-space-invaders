@@ -14,6 +14,7 @@ body {
 
 button {
     border-radius: 40px !important;
+    width: 30%;
 }
 
 #lista {
@@ -28,6 +29,10 @@ img {
     -webkit-user-drag: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+}
+
+#panel {
+    width: 70%;
 }
 
 #player {
@@ -45,5 +50,31 @@ img {
 @media screen and (max-width: 767.98px) {
     #player {
        /*  height: 300px; */
+    }
+
+    button {
+        width: auto;
+        font-size: 13px !important;
+    }
+
+    #lista {
+        width: 100px;
+    }
+
+    #proposta {
+        font-size: 13px;
+        
+    }
+
+    #lastScoreText {
+        font-size: 13px;
+    }
+
+    #lastScore {
+        font-size: 22px;
+    }
+
+    #panel {
+        width: 85%;
     }
 }
