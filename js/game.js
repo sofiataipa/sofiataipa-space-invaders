@@ -12,7 +12,7 @@ const levelElement = $('#level');
 const lastScoreElement = $('#lastScore');
 const startGameBtn = $('.btn')[0];
 const modalElement = $('#modal');
-
+const propostasElement = $('#proposta');
 
 const playerElement = $("#player");
 playerElement.hide();
@@ -224,7 +224,19 @@ let player = new Player(playerX, playerY, playerW, playerH, playerColor);
 let projectiles = [];
 let enemies = [];
 let particles  = [];
-// let touchLocation;
+let propostas = [
+    'Frase inicial' ,
+    'Exemplo proposta 1' , 
+    'Exemplo proposta 2' , 
+    'Exemplo proposta 3' , 
+    'Exemplo proposta 4' ,
+    'Exemplo proposta 5'
+];
+
+let propostasShuffled = [];
+let propostasIndex = 0;
+// First text always first
+propostasElement.html(propostas[propostasIndex]);
 
 function initGame() {  
     player = new Player(playerX, playerY, playerW, playerH, playerColor);
@@ -233,11 +245,23 @@ function initGame() {
     particles  = [];
     score = 0;
     currentLevel = 1;
+
     updateScore(scoreElement, 0);
     updateScore(lastScoreElement, 0);
 
     canvas.style.display = "";
     stats.show();
+
+    shuffledArray = shuffleArray(propostas);
+    propostasElement.html(shuffledArray[propostasIndex]);
+    // if(propostasIndex == 0) {
+    //     //tirar link maybe
+    // }
+    propostasIndex++;
+    
+    if(propostasIndex == shuffledArray.length) {
+        propostasIndex = 0;
+    }
 
     animate();
     
@@ -269,6 +293,28 @@ function endGame() {
     canvas.style.display = "none";
     playerElement.hide();
     stats.hide();
+}
+
+function shuffleArray(array) {
+    let indexes = []
+    let shuffledArray = [];
+
+    for(let i=1; i < array.length-1; i++) {
+        indexes.push(i); 
+    }
+
+    // // First text always first
+    // shuffledArray.push(array[0]);
+
+    // Gera um indice aleatório, adiciona a carta do deck ao
+    // shuffled deck e elimina esse índice das opções
+    for(let i=1; i < array.length-1; i++) {
+        let index = Math.floor(Math.random() * indexes.length);
+        shuffledArray.push(array[indexes[index]]);
+        indexes.splice(index, 1);
+    }
+    console.log(shuffledArray);
+    return shuffledArray;
 }
 
  // Increase score
