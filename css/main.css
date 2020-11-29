@@ -72,7 +72,8 @@ img {
 
 #container {
     height: 83px;
-    background: rgb(71, 177, 193);
+    background: black; 
+    /* background: rgb(71, 177, 193); */
     /* background: #466469 */
     z-index: 2;
 }
