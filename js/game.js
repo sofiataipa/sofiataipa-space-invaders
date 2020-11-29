@@ -254,30 +254,14 @@ let player = new Player(playerX, playerY, playerW, playerH, playerColor);
 let projectiles = [];
 let enemies = [];
 let particles  = [];
-let propostas = [
-    'Exemplo proposta 1' , 
-    'Exemplo proposta 2' , 
-    'Exemplo proposta 3' , 
-    'Exemplo proposta 4' ,
-    'Exemplo proposta 5'
-];
+let propostas = getPropostas(); 
 
 let propostasShuffled = shuffleArray(propostas);;
 let propostasIndex = 0;
 // First text always first
 // propostasElement.html(propostas[propostasIndex]);
 
-let palavras = [
-    'PeliCuf' , 'LIA' , 'Workshops' , 'Palestras' , 'Research4U' , 'Proatividade' ,
-    '+Estágios' , '+Congressos' , 'Piati' , '+Parcerias ' , 'Med On Tour' , 'Ser Abrigo' , 
-    'B.A.' , 'Expansão' , 'Sunsets' , 'SCOPE' , 'SCORE' , 'PET/T4PE' , 
-    'Erasmus+' , 'Buddy' , 'Quizzes' , 'Soft Skills' , 'Bolsas' , 'Literatura Ativa' , 
-    'Vendas Online' , 'Camisolas SBV' , '+Representação' , 'SIGMA' , 'Sistema de Pontos' , 'APP AEFCM' , 
-    'Proximidade' , 'COVID-19' , 'NMS Photography' , 'Podcast' , 'Desafios' , 'Concursos' , 
-    'Stand Up' , 'Concertos' , 'Bares' , 'Discotecas' , 'Arraial' , 'Film Club' , 
-    'Disponibilidade' , 'Caixa de Dúvidas' , 'SASNOVA' , 'Soft Skills' , 'Torneios' , 'Programação' , 
-    'Workshops' , 'Apoio 24/7' , 'Parcerias Desporto' , 'Proximidade' , 'Transparência' , 'Debate' , 
-];
+let palavras = getPalavras();
 
 let palavrasShuffled = shuffleArray(palavras);
 let palavrasIndex = 0;
@@ -579,3 +563,66 @@ document.addEventListener('visibilitychange', function() {
     }
 });
 
+function getPalavras() {
+    return ([ 
+    'PeliCuf' , 'LIA' , 'Workshops' , 'Palestras' , 'Research4U' , 'Proatividade' ,
+    '+Estágios' , '+Congressos' , 'Piati' , '+Parcerias ' , 'Med On Tour' , 'Ser Abrigo' , 
+    'B.A.' , 'Expansão' , 'Sunsets' , 'SCOPE' , 'SCORE' , 'PET/T4PE' , 
+    'Erasmus+' , 'Buddy' , 'Quizzes' , 'Soft Skills' , 'Bolsas' , 'Literatura Ativa' , 
+    'Vendas Online' , 'Camisolas SBV' , '+Representação' , 'SIGMA' , 'Sistema de Pontos' , 'APP AEFCM' , 
+    'Proximidade' , 'COVID-19' , 'NMS Photography' , 'Podcast' , 'Desafios' , 'Concursos' , 
+    'Stand Up' , 'Concertos' , 'Bares' , 'Discotecas' , 'Arraial' , 'Film Club' , 
+    'Disponibilidade' , 'Caixa de Dúvidas' , 'SASNOVA' , 'Soft Skills' , 'Torneios' , 'Programação' , 
+    'Workshops' , 'Apoio 24/7' , 'Parcerias Desporto' , 'Proximidade' , 'Transparência' , 'Debate' , 
+    ]);
+}
+function getPropostas() {
+    return ([ 
+    'Propomos a criação do Gabinete do estudante!' ,
+    'Propomos um Espaço de Apoio Psicológico para os alunos, em parceria com o SASNOVA!' ,
+    'Propomos um workshop “Início de vida adulta”!' ,
+    'Propomos um workshop Python 101!' ,
+    'Propomos um workshop de soft-skills: comunicação em público, networking, liderança!' ,
+    'Propomos torneios desportivos: 3x3 Basket, padel, voleibol e outros!' ,
+    'Propomos a organização de Sessões de Treino individual em casa!' ,
+    'Propomos a criação da APP AEFCM!' ,
+    'Propomos a criação do evento NMS Photography!' ,
+    'Propomos Noites de Quizz de videoconferência online!' ,
+    'Propomos a criação de um programa de integração dos novos alunos, Buddies!' ,
+    'Propomos a explicação atempada e atrativa dos documentos apresentados em AG: por exemplo, com Doodle vídeos!' ,
+    'Propomos a organização de um Virtual Speed Friending com recurso a plataforma online dirigido a alunos do 1º ano' ,
+    'Propomos a criação de um Podcast!' , 
+    'Propomos uma continuação da Rubrica Cultural' ,
+    'Propomos a criação de um Film Club!' , 
+    'Propomos a promoção de parcerias com diversos espaços culturais!' , 
+    'Propomos um concurso de fotografia!' , 
+    'Propomos a criação de um concurso gastronómico!' , 
+    'Propomos a organização da receção NMS, Arrail NMS e da Gala FCM|NMS 2021!' , 
+    'Propomos a criação de um sistema de pontos para fins de intercâmbio a quem preencher todos os questionários de avaliação!' , 
+    'Propomos a reestruturação dos questionários de qualidade de ensino através da apresentação do SIGMA!' , 
+    'Propomos a elaboração de um “Quadro de Excelência do Corpo Docente”, onde se contemplam os Professores que obtêm melhor pontuação nos questionários, estimulando a melhoria do ensino!' , 
+    'Propomos a disponibilização de lugares de estacionamento, nas várias Unidades Hospitalares!' , 
+    'Propomos a criação um banco de livros não-técnicos usados, com troca dinâmica dos mesmos!' , 
+    'Propomos a criação de um banco de camisolas de SBV, através de um sistema de aluguer!' , 
+    'Propomos a otimização de vendas online e marketing da loja!' , 
+    'Propomos uma receção NMS em formato espetáculo como, por exemplo, um concerto, cumprindo as normas vigentes pela DGS' , 
+    'Propomos, em alternativa ao arrail NMS, em formato espetáculo como, por exemplo, stand up comedy, cumprindo as normas vigentes pela DGS' , 
+    'Propomos a criação de uma plataforma de partilha de experiências internacionais no site da AEFCM!' , 
+    'Propomos um novo projeto: Ser Abrigo,dirigido a grupos populacionais mais vulneráveis' , 
+    'Propomos o projeto Acolher: dinamização do dia das matrículas. Alunos mais velhos que recebem os novos alunos e mostram a Faculdade, esclarecem dúvidas e dão orientações' , 
+    'Propomos a continuidade do projeto O Meu Melhor Amigo!' , 
+    'Propomos a organização do Congresso PECLICUF!' , 
+    'Propomos a criação de vagas de estágio específicas para as especialidades!' ,  
+    'Propomos a criação de mais bolsas de ação social!' ,
+    'Propomos a criação de bolsas de mérito!' , 
+    'Propomos a criação do Congresso PIATI!' , 
+    'Propomos a promoção de competições, tanto presenciais, como via redes sociais, acerca das ciências básicas em Medicina!' , 
+    'Propomos a organização de concursos clínicos via redes sociais, que complementam as formações dos estudantes!' , 
+    'Propomos oferecer oportunidades de estágio que complementem algumas UC’s para o curso de nutrição!' , 
+    'Propomos a criação de um programa de estágios clínicos e científicos para o curso de nutrição!' , 
+    'Propomos a criação de grupos de interesse em variadas especialidades, constituídos por estudantes e por um médico orientador. ' , 
+    'Propomos a criação do gabinete de "Expansão" que procede à elaboração de novos protocolos para projetos de outgoing e incoming!' , 
+    'Propomos uma Welcome Week com sessão de receção aos alunos incoming, o sunset "Welcome Erasmus" e a Cultural Evening!' , 
+    'Propomos' , 
+    ]);
+}
