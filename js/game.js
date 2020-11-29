@@ -598,7 +598,7 @@ function getPropostas() {
     'Propomos a promoção de parcerias com diversos espaços culturais!' , 
     'Propomos um concurso de fotografia!' , 
     'Propomos a criação de um concurso gastronómico!' , 
-    'Propomos a organização da receção NMS, Arrail NMS e da Gala FCM|NMS 2021!' , 
+    'Propomos a organização da receção NMS, Arraial NMS e da Gala FCM|NMS 2021!' , 
     'Propomos a criação de um sistema de pontos para fins de intercâmbio a quem preencher todos os questionários de avaliação!' , 
     'Propomos a reestruturação dos questionários de qualidade de ensino através da apresentação do SIGMA!' , 
     'Propomos a elaboração de um “Quadro de Excelência do Corpo Docente”, onde se contemplam os Professores que obtêm melhor pontuação nos questionários, estimulando a melhoria do ensino!' , 
