@@ -55,8 +55,8 @@ img {
 }
 
 .watermark {
-    opacity: 0.25;
-    font-size: 8px;
+    opacity: 0.2;
+    font-size: 7px;
 }
 
 /* Small devices (landscape phones, less than 768px) */
