@@ -79,6 +79,9 @@ img {
 }
 
 
+button:focus {
+    outline: none;
+}
 
 
 /* Small devices (landscape phones, less than 768px) */
