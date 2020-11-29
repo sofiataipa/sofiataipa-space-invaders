@@ -14,7 +14,9 @@ const startGameBtn = $('.btn')[0];
 const modalElement = $('#modal');
 const propostasElement = $('#proposta');
 
+const palavrasDiv = $('#palavras');
 const playerElement = $("#player");
+palavrasDiv.hide();
 playerElement.hide();
 stats.hide();
 
@@ -122,28 +124,52 @@ class Projectile {
 
 // Enemy
 class Enemy {
-    constructor(x, y, radius, color, velocity) {
+    constructor(x, y, radius, color, velocity, palavra) {
         this.x = x;
         this.y = y;
-        this.radius = Math.random() * (radius - 10) + 10;
+        this.radius = radius;
         this.color = color;
         this.velocity = velocity;
+        this.palavra = palavra;
+        
+        if(this.palavra != null) {
+            this.id = palavra.replace(/[^a-zA-Z]+/g, '');
+            palavrasDiv.append(`<span id="${this.id}" class="user-select-none m-0 p-0 text-light text-center palavra">${this.palavra}</span>`)
+        } 
     }
 
     draw() {
         c.beginPath();
         c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
-        c.fillStyle = this.color; //'rgba(0,0,0,0)';
+        c.fillStyle =  this.color;//'rgba(255,255,255,10)'// //'rgba(0,0,0,0)';
         //c.strokeStyle = this.color;
         //c.stroke();
-
         c.fill();
+        c.closePath();
+
+        if(this.palavra != null) {
+            let tag = `#${this.id}`;
+            let w = parseFloat($(tag).css('width'));
+            let h = parseFloat($(tag).css('height'));
+            console.log("w: " + w + ", + h:" + h);
+            $(tag)[0].style.left = `${this.x-w/2}px`;
+            $(tag)[0].style.top = `${this.y-h/2}px`;   
+            if(this.radius < 30) {   
+                $(tag).remove();
+                this.palavra = null;
+            }
+            if(w > this.radius*2) {
+                $(tag).remove();
+                this.palavra = null;
+            }
+        }
     }
 
     update() {
         this.draw();
         this.x = this.x + this.velocity.x;
         this.y = this.y + this.velocity.y;
+        
     }
 }
 
@@ -266,18 +292,13 @@ function initGame() {
 
     canvas.style.display = "";
     stats.show();
-
+    palavrasDiv.show();
    
     propostasElement.html(propostasShuffled[propostasIndex]);
     // if(propostasIndex == 0) {
     //     //tirar link maybe
     // }
     propostasIndex++;
-    if(propostasIndex == propostasShuffled.length) {
-        propostasIndex = 0;
-    }
-
-    palavrasIndex++; 
     if(propostasIndex == propostasShuffled.length) {
         propostasIndex = 0;
     }
@@ -312,6 +333,7 @@ function endGame() {
     canvas.style.display = "none";
     playerElement.hide();
     stats.hide();
+    palavrasDiv.hide();
 }
 
 function shuffleArray(array) {
@@ -332,7 +354,6 @@ function shuffleArray(array) {
         shuffledArray.push(array[indexes[index]]);
         indexes.splice(index, 1);
     }
-    console.log(shuffledArray);
     return shuffledArray;
 }
 
@@ -354,14 +375,19 @@ function updateLevel() {
 function updateEnemyInterval() {
     clearInterval(spawnEnemiesInterval);
     let interval = (1500*Math.pow(0.9, currentLevel));
-    console.log(interval);
     spawnEnemiesInterval = setInterval(spawnEnemies, interval > 300 ? interval : 300);
 }
 
 let spawnEnemiesInterval;
 // Spawn enemies
 function spawnEnemies() {
-        let maxEnemyRadius = 50; 
+        
+        if(palavrasIndex == palavrasShuffled.length) {
+            palavrasIndex = 0;
+        }
+
+        let maxEnemyRadius = 60; 
+        let EnemyRadius = Math.random() * (maxEnemyRadius - 10) + 10;
         let enemyX = Math.random() * (canvas.width - 2*maxEnemyRadius*2) + maxEnemyRadius*2; //canvas.width/2
         let enemyY = maxEnemyRadius*2;
         let enemyColor = `hsl(${Math.random()*360}, 40%, 50%)`;
@@ -369,8 +395,17 @@ function spawnEnemies() {
             x: 0,
             y: Math.min((2*Math.pow(1.1, currentLevel)), 6)
         };
-        console.log("vel: " + enemyVelocity.y);
-        enemies.push(new Enemy(enemyX, enemyY, maxEnemyRadius, enemyColor, enemyVelocity));
+        let palavra = null;
+        if(EnemyRadius > 30) {
+            palavra = palavrasShuffled[palavrasIndex];
+        }
+        
+        enemies.push(new Enemy(enemyX, enemyY, EnemyRadius, enemyColor, enemyVelocity, palavra));
+        
+        if(EnemyRadius > 30) {
+            palavrasIndex++; 
+        }
+       
 }
 
 
@@ -439,11 +474,13 @@ function animate() {
         let dist = Math.hypot(player.x - enemy.x, player.y - enemy.y); 
         if( dist - (enemy.radius) <= 0 ||  
             ( (enemy.y > player.y) && (enemy.x > player.x - player.w/4)  && (enemy.x < player.x + player.w/4) ) ) {
+            $(`#${enemy.id}`).remove();
             cancelAnimationFrame(animationId);
             updateScore(lastScoreElement, 0);
             modalElement.addClass('d-flex');
             modalElement.removeClass('d-none');
             endGame();
+           
         }
 
         for(let j in projectiles) {
@@ -474,7 +511,8 @@ function animate() {
                         // Explosion effect
                         for(let i=0; i < enemy.radius* numParticlesRatio; i++) {
                             particles.push(new Particle(projectile.x, projectile.y, particleRadius, enemy.color));
-                        }                
+                        }        
+                        $(`#${enemy.id}`).remove();        
                         enemies.splice(i, 1);
                         projectiles.splice(j, 1);
                     }, 0);  
@@ -487,9 +525,10 @@ function animate() {
             // setTimeout(() => {
             //     enemies.splice(i, 1);
             // }, 0); 
+            $(`#${enemy.id}`).remove();
             cancelAnimationFrame(animationId);
             updateScore(lastScoreElement, 0);
-            endGame();
+            endGame();          
         }
     }
 }
