@@ -545,7 +545,7 @@ let listener = function (event){
     player.update(event);
 }
 
-startGameBtn.addEventListener('touchstart', (event) => {
+startGameBtn.addEventListener('touchend', (event) => {
     initGame();
 });
 
