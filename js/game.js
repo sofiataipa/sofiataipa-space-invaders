@@ -428,6 +428,7 @@ let currentLevel = 1;
 
 // Animates frame by frame
 function animate() {
+
     animationId = requestAnimationFrame(animate);
 
     // Resizing frame
@@ -563,3 +564,23 @@ startGameBtn.addEventListener('touchstart', (event) => {
 startGameBtn.addEventListener('click', (event) => {
     initGame();
 });
+
+document.addEventListener('visibilitychange', function() {
+    if(document.hidden) {
+        console.log("hidden");
+        // tab is now inactive
+        clearInterval(spawnEnemiesInterval);
+        clearInterval(spawnProjectilesInterval);
+    }
+    
+    else {
+        console.log("active");
+        // tab is active again
+        spawnProjectilesInterval = setInterval(spawnProjectiles, 300);
+        updateEnemyInterval();
+    }
+});
+
+//     spawnProjectilesInterval = setInterval(spawnProjectiles, 300);
+//     updateEnemyInterval();
+// }
