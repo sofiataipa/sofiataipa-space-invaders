@@ -136,6 +136,9 @@ class Enemy {
             this.id = palavra.replace(/[^a-zA-Z]+/g, '');
             palavrasDiv.append(`<span id="${this.id}" class="user-select-none m-0 p-0 text-light text-center palavra">${this.palavra}</span>`)
         } 
+        else {
+            this.id = null;
+        }
     }
 
     draw() {
@@ -161,6 +164,7 @@ class Enemy {
                 if(w > this.radius*2) {
                     $(tag).remove();
                     this.palavra = null;
+                    this.id = null;
                 }
             }
         }
@@ -170,7 +174,6 @@ class Enemy {
         this.draw();
         this.x = this.x + this.velocity.x;
         this.y = this.y + this.velocity.y;
-        
     }
 }
 
@@ -269,7 +272,7 @@ let palavras = [
     '+Estágios' , '+Congressos' , 'Piati' , '+Parcerias ' , 'Med On Tour' , 'Ser Abrigo' , 
     'B.A.' , 'Expansão' , 'Sunsets' , 'SCOPE' , 'SCORE' , 'PET/T4PE' , 
     'Erasmus+' , 'Buddy' , 'Quizzes' , 'Soft Skills' , 'Bolsas' , 'Literatura Ativa' , 
-    'Vendas Online' , 'Camisolas SBV' , '+Representação;' , 'SIGMA' , 'Sistema de Pontos' , 'APP AEFCM' , 
+    'Vendas Online' , 'Camisolas SBV' , '+Representação' , 'SIGMA' , 'Sistema de Pontos' , 'APP AEFCM' , 
     'Proximidade' , 'COVID-19' , 'NMS Photography' , 'Podcast' , 'Desafios' , 'Concursos' , 
     'Stand Up' , 'Concertos' , 'Bares' , 'Discotecas' , 'Arraial' , 'Film Club' , 
     'Disponibilidade' , 'Caixa de Dúvidas' , 'SASNOVA' , 'Soft Skills' , 'Torneios' , 'Programação' , 
