@@ -334,6 +334,7 @@ function endGame() {
     playerElement.hide();
     stats.hide();
     palavrasDiv.hide();
+    palavrasDiv.children().remove();
 }
 
 function shuffleArray(array) {
