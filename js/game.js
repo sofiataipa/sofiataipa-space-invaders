@@ -154,10 +154,10 @@ class Enemy {
             if($(tag)[0] != undefined){
                 $(tag)[0].style.left = `${this.x-w/2}px`;
                 $(tag)[0].style.top = `${this.y-h/2}px`;   
-                if(this.radius < 30) {   
-                    $(tag).remove();
-                    this.palavra = null;
-                }
+                // if(this.radius < 20) {   
+                //     $(tag).remove();
+                //     this.palavra = null;
+                // }
                 if(w > this.radius*2) {
                     $(tag).remove();
                     this.palavra = null;
@@ -399,13 +399,13 @@ function spawnEnemies() {
             y: Math.min((2*Math.pow(1.1, currentLevel)), 6)
         };
         let palavra = null;
-        if(EnemyRadius > 30) {
+        if(EnemyRadius > 20) {
             palavra = palavrasShuffled[palavrasIndex];
         }
         
         enemies.push(new Enemy(enemyX, enemyY, EnemyRadius, enemyColor, enemyVelocity, palavra));
         
-        if(EnemyRadius > 30) {
+        if(EnemyRadius > 20) {
             palavrasIndex++; 
         }
        
