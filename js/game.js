@@ -132,12 +132,12 @@ class Enemy {
         this.velocity = velocity;
         this.palavra = palavra;
         
-        if(this.palavra != null) {
+        if(this.palavra !== null) {
             this.id = palavra.replace(/[^a-zA-Z]+/g, '');
             palavrasDiv.append(`<span id="${this.id}" class="user-select-none m-0 p-0 text-light text-center palavra">${this.palavra}</span>`)
         } 
         else {
-            this.id = null;
+            // this.id = null;
         }
     }
 
@@ -150,7 +150,7 @@ class Enemy {
         c.fill();
         c.closePath();
 
-        if(this.palavra != null) {
+        if(this.palavra !== null) {
             let tag = `#${this.id}`;
             let w = parseFloat($(tag).css('width'));
             let h = parseFloat($(tag).css('height'));
@@ -164,7 +164,7 @@ class Enemy {
                 if(w > this.radius*2) {
                     $(tag).remove();
                     this.palavra = null;
-                    this.id = null;
+                    // this.id = null;
                 }
             }
         }
@@ -512,13 +512,12 @@ function animate() {
                 // Remove from scene
                 else {
                     updateScore(scoreElement, Math.round(15*enemy.radius));
-
+                    $(`#${enemy.id}`).remove(); 
                     setTimeout(() => {
                         // Explosion effect
                         for(let i=0; i < enemy.radius* numParticlesRatio; i++) {
                             particles.push(new Particle(projectile.x, projectile.y, particleRadius, enemy.color));
-                        }        
-                        $(`#${enemy.id}`).remove();        
+                        }               
                         enemies.splice(i, 1);
                         projectiles.splice(j, 1);
                     }, 0);  
