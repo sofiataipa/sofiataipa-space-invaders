@@ -58,7 +58,11 @@ class Player {
 
     update(e) {
         if(e.targetTouches !== undefined ) {
-            this.x = e.targetTouches[0].pageX;
+            let touchX = e.targetTouches[0].pageX;
+            if(touchX > this.w/2 && touchX < canvas.width - this.w/2 ) { 
+                this.x = touchX;
+            }
+           
         }
         
         if(e.clientX > this.w/2 && e.clientX < canvas.width - this.w/2 ) {
