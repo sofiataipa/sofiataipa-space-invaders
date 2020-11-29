@@ -48,6 +48,7 @@ img {
     /* margin-top: -50px;
     margin-left: -50px; */
     font-size: 10px;
+    z-index: 1;
   }
 
 .bigger {
@@ -55,9 +56,29 @@ img {
 }
 
 .watermark {
-    opacity: 0.2;
-    font-size: 7px;
+    opacity: 0.6;
+    font-size: 8px;
+    z-index: 3;
 }
+
+#stats {
+    /* transition: 1s ease; */
+   
+}
+
+#pontuacao {
+    opacity: 0.6;
+}
+
+#container {
+    height: 83px;
+    background: rgb(71, 177, 193);
+    /* background: #466469 */
+    z-index: 2;
+}
+
+
+
 
 /* Small devices (landscape phones, less than 768px) */
 @media screen and (max-width: 767.98px) {

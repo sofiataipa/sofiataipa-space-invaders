@@ -375,11 +375,11 @@ function spawnEnemies() {
         if(palavrasIndex == palavrasShuffled.length) {
             palavrasIndex = 0;
         }
-
+        let h = parseFloat(stats.css('height'));
         let maxEnemyRadius = 60; 
         let EnemyRadius = Math.random() * (maxEnemyRadius - 10) + 10;
         let enemyX = Math.random() * (canvas.width - 2*maxEnemyRadius*2) + maxEnemyRadius*2; //canvas.width/2
-        let enemyY = 0 - maxEnemyRadius*2;
+        let enemyY = h - maxEnemyRadius;
         let enemyColor = `hsl(${Math.random()*360}, 40%, 50%)`;
         let enemyVelocity = {
             x: 0,
