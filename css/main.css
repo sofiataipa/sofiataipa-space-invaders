@@ -56,7 +56,7 @@ img {
 }
 
 .watermark {
-    opacity: 0.15;
+    opacity: 0.2;
     font-size: 8px;
     z-index: 3;
 }
