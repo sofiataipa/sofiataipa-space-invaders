@@ -137,7 +137,7 @@ class Enemy {
             palavrasDiv.append(`<span id="${this.id}" class="user-select-none m-0 p-0 text-light text-center palavra">${this.palavra}</span>`)
         } 
         else {
-            // this.id = null;
+            this.id = null;
         }
     }
 
@@ -164,7 +164,7 @@ class Enemy {
                 if(w > this.radius*2) {
                     $(tag).remove();
                     this.palavra = null;
-                    // this.id = null;
+                    this.id = null;
                 }
             }
         }
@@ -536,6 +536,20 @@ function animate() {
             endGame();          
         }
     }
+
+    let exists = false;
+    palavrasDiv.children().each( function() {
+        for(let i in enemies) {
+            let enemy = enemies[i];
+            if($(this).attr("id") == enemy.id) {
+                exists = true;
+            }
+        }
+        if(!exists) {
+            $(this).remove();
+        }
+    }); 
+    
 }
 
 let listener = function (event){
