@@ -151,16 +151,17 @@ class Enemy {
             let tag = `#${this.id}`;
             let w = parseFloat($(tag).css('width'));
             let h = parseFloat($(tag).css('height'));
-            console.log("w: " + w + ", + h:" + h);
-            $(tag)[0].style.left = `${this.x-w/2}px`;
-            $(tag)[0].style.top = `${this.y-h/2}px`;   
-            if(this.radius < 30) {   
-                $(tag).remove();
-                this.palavra = null;
-            }
-            if(w > this.radius*2) {
-                $(tag).remove();
-                this.palavra = null;
+            if($(tag)[0] != undefined){
+                $(tag)[0].style.left = `${this.x-w/2}px`;
+                $(tag)[0].style.top = `${this.y-h/2}px`;   
+                if(this.radius < 30) {   
+                    $(tag).remove();
+                    this.palavra = null;
+                }
+                if(w > this.radius*2) {
+                    $(tag).remove();
+                    this.palavra = null;
+                }
             }
         }
     }
