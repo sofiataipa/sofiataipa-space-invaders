@@ -288,7 +288,7 @@ function initGame() {
     score = 0;
     currentLevel = 1;
     levelElement.html(currentLevel);
-    
+
     updateScore(scoreElement, 0);
     updateScore(lastScoreElement, 0);
 
@@ -392,7 +392,7 @@ function spawnEnemies() {
         let maxEnemyRadius = 60; 
         let EnemyRadius = Math.random() * (maxEnemyRadius - 10) + 10;
         let enemyX = Math.random() * (canvas.width - 2*maxEnemyRadius*2) + maxEnemyRadius*2; //canvas.width/2
-        let enemyY = maxEnemyRadius*2;
+        let enemyY = 0 - maxEnemyRadius*2;
         let enemyColor = `hsl(${Math.random()*360}, 40%, 50%)`;
         let enemyVelocity = {
             x: 0,
