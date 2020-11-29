@@ -87,6 +87,7 @@ button:active {
     color: #fff;
     background-color: #17a2b8;
     border-color: #17a2b8;
+    transition: 0.5s ease;
 }
 
 /* Small devices (landscape phones, less than 768px) */
