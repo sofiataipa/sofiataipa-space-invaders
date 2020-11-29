@@ -576,6 +576,7 @@ function getPalavras() {
     'Workshops' , 'Apoio 24/7' , 'Parcerias Desporto' , 'Proximidade' , 'Transparência' , 'Debate' , 
     ]);
 }
+
 function getPropostas() {
     return ([ 
     'Propomos a criação do Gabinete do estudante!' ,
