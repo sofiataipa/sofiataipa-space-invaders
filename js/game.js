@@ -287,7 +287,8 @@ function initGame() {
     particles  = [];
     score = 0;
     currentLevel = 1;
-
+    levelElement.html(currentLevel);
+    
     updateScore(scoreElement, 0);
     updateScore(lastScoreElement, 0);
 
