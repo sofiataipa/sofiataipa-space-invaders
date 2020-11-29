@@ -358,7 +358,7 @@ function updateScore(scoreEl, value) {
 }
 
 function updateLevel() {
-    let nextLevelScore = Math.round(1000 * Math.pow(currentLevel, 1.5));
+    let nextLevelScore = Math.round(2500 * Math.pow(currentLevel, 1.5));
     if(score > nextLevelScore) {
         currentLevel++;
         levelElement.html(currentLevel);
@@ -368,8 +368,8 @@ function updateLevel() {
 
 function updateEnemyInterval() {
     clearInterval(spawnEnemiesInterval);
-    let interval = (1500*Math.pow(0.9, currentLevel));
-    spawnEnemiesInterval = setInterval(spawnEnemies, interval > 300 ? interval : 300);
+    let interval = (1000*Math.pow(0.9, currentLevel));
+    spawnEnemiesInterval = setInterval(spawnEnemies, interval > 500 ? interval : 500);
 }
 
 let spawnEnemiesInterval;
@@ -380,14 +380,14 @@ function spawnEnemies() {
             palavrasIndex = 0;
         }
         let h = parseFloat(stats.css('height'));
-        let maxEnemyRadius = 60; 
+        let maxEnemyRadius = 50; 
         let EnemyRadius = Math.random() * (maxEnemyRadius - 10) + 10;
-        let enemyX = Math.random() * (canvas.width - 2*maxEnemyRadius*2) + maxEnemyRadius*2; //canvas.width/2
+        let enemyX = Math.random() * (canvas.width - 2*maxEnemyRadius) + maxEnemyRadius; 
         let enemyY = h - maxEnemyRadius;
         let enemyColor = `hsl(${Math.random()*360}, 40%, 50%)`;
         let enemyVelocity = {
             x: 0,
-            y: Math.min((2*Math.pow(1.1, currentLevel)), 6)
+            y: Math.min((3*Math.pow(1.05, currentLevel)), 5)
         };
         let palavra = null;
         if(EnemyRadius > 20) {
