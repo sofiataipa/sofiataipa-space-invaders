@@ -568,19 +568,16 @@ startGameBtn.addEventListener('click', (event) => {
 document.addEventListener('visibilitychange', function() {
     if(document.hidden) {
         console.log("hidden");
-        // tab is now inactive
+        // Tab is now inactive
         clearInterval(spawnEnemiesInterval);
         clearInterval(spawnProjectilesInterval);
     }
     
     else {
         console.log("active");
-        // tab is active again
+        // Tab is active again
         spawnProjectilesInterval = setInterval(spawnProjectiles, 300);
         updateEnemyInterval();
     }
 });
 
-//     spawnProjectilesInterval = setInterval(spawnProjectiles, 300);
-//     updateEnemyInterval();
-// }
