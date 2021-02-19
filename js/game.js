@@ -1,62 +1,92 @@
-// Game setup
-const canvas = document.querySelector('canvas');
-const c = canvas.getContext('2d'); // Context
+let spawnEnemiesInterval;
 
-canvas.width = innerWidth;
-canvas.height = innerHeight;
+function main() { 
+    // Game setup
+    const canvas = document.querySelector('canvas');
+    const c = canvas.getContext('2d'); // Context
 
-const stats = $('#stats');
-const scoreElement = $('#score');
-const levelElement = $('#level');
-const lastScoreElement = $('#lastScore');
-const startGameBtn = $('.btn')[0];
-const modalElement = $('#modal');
-const propostasElement = $('#proposta');
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
 
-const palavrasDiv = $('#palavras');
-const playerElement = $("#player");
-palavrasDiv.hide();
-playerElement.hide();
-stats.hide();
+    const stats = $('#stats');
+    const scoreElement = $('#score');
+    const levelElement = $('#level');
+    const lastScoreElement = $('#lastScore');
+    const startGameBtn = $('.btn')[0];
+    const modalElement = $('#modal');
+    const propostasElement = $('#proposta');
 
-//modalElement.style.display = 'none !important';
-//const modalElement = document.querySelector('#modal');
+    const palavrasDiv = $('#palavras');
+    const playerElement = $("#player");
+    palavrasDiv.hide();
+    playerElement.hide();
+    stats.hide();
 
-const friction = 0.99;
+    //modalElement.style.display = 'none !important';
+    //const modalElement = document.querySelector('#modal');
 
-// Player variables
-let playerW = parseFloat(playerElement.css('width'));
-let playerH = parseFloat(playerElement.css('height'));
-let playerX = canvas.width/2;
-let playerY = canvas.height - (playerH);
-let playerColor = 'white';
+    const friction = 0.99;
 
-// Projectile variables
-let projectileRadius = 8;
-//let projectileColor = 'rgb(150, 40, 40)';
-let projectileColor = 'rgb(200, 220, 220)';
-let projectileVelocity = 5;
+    // Player variables
+    let playerW = parseFloat(playerElement.css('width'));
+    let playerH = parseFloat(playerElement.css('height'));
+    let playerX = canvas.width/2;
+    let playerY = canvas.height - (playerH);
+    let playerColor = 'white';
 
-// Particle variables
-let numParticlesRatio = 2;
-let particleRadius = 2;
+    // Projectile variables
+    let projectileRadius = 8;
+    //let projectileColor = 'rgb(150, 40, 40)';
+    let projectileColor = 'rgb(200, 220, 220)';
+    let projectileVelocity = 5;
 
-// Game variables
-let player = new Player(playerX, playerY, playerW, playerH, playerColor);
-let projectiles = [];
-let enemies = [];
-let particles  = [];
-let propostas = getPropostas(); 
+    // Particle variables
+    let numParticlesRatio = 2;
+    let particleRadius = 2;
 
-let propostasShuffled = shuffleArray(propostas);;
-let propostasIndex = 0;
-// First text always first
-// propostasElement.html(propostas[propostasIndex]);
+    // Game variables
+    let player = new Player(playerX, playerY, playerW, playerH, playerColor);
+    let projectiles = [];
+    let enemies = [];
+    let particles  = [];
+    let propostas = getPropostas(); 
 
-let palavras = getPalavras();
+    let propostasShuffled = shuffleArray(propostas);;
+    let propostasIndex = 0;
+    // First text always first
+    // propostasElement.html(propostas[propostasIndex]);
 
-let palavrasShuffled = shuffleArray(palavras);
-let palavrasIndex = 0;
+    let palavras = getPalavras();
+
+    let palavrasShuffled = shuffleArray(palavras);
+    let palavrasIndex = 0;
+
+    let animationId;
+    let score = 0;
+    let currentLevel = 1;
+
+    startGameBtn.addEventListener('touchend', (event) => {
+        initGame();
+    });
+    
+    startGameBtn.addEventListener('click', (event) => {
+        initGame();
+    });
+    
+    document.addEventListener('visibilitychange', function() {
+        if(document.hidden) {
+            // Tab is now inactive
+            clearInterval(spawnEnemiesInterval);
+            clearInterval(spawnProjectilesInterval);
+        }
+        
+        else {
+            // Tab is active again
+            spawnProjectilesInterval = setInterval(spawnProjectiles, 300);
+            updateEnemyInterval();
+        }
+    });
+}
 
 function initGame() {  
     player = new Player(playerX, playerY, playerW, playerH, playerColor);
@@ -159,7 +189,7 @@ function updateEnemyInterval() {
     spawnEnemiesInterval = setInterval(spawnEnemies, interval > 500 ? interval : 500);
 }
 
-let spawnEnemiesInterval;
+
 // Spawn enemies
 function spawnEnemies() {
         if(palavrasIndex == palavrasShuffled.length) {
@@ -188,21 +218,13 @@ function spawnEnemies() {
        
 }
 
-
-let spawnProjectilesInterval;
-// Spawn enemies
+// Spawn projectiles
 function spawnProjectiles() {
     projectiles.push(new Projectile(player.x, player.y -17, projectileRadius, projectileColor, projectileVelocity)); 
 }
 
-
-let animationId;
-let score = 0;
-let currentLevel = 1;
-
 // Animates frame by frame
 function animate() {
-
     animationId = requestAnimationFrame(animate);
 
     // Resizing frame
@@ -330,28 +352,6 @@ function animate() {
 let listener = function (event){
     player.update(event);
 }
-
-startGameBtn.addEventListener('touchend', (event) => {
-    initGame();
-});
-
-startGameBtn.addEventListener('click', (event) => {
-    initGame();
-});
-
-document.addEventListener('visibilitychange', function() {
-    if(document.hidden) {
-        // Tab is now inactive
-        clearInterval(spawnEnemiesInterval);
-        clearInterval(spawnProjectilesInterval);
-    }
-    
-    else {
-        // Tab is active again
-        spawnProjectilesInterval = setInterval(spawnProjectiles, 300);
-        updateEnemyInterval();
-    }
-});
 
 function getPalavras() {
     return ([ 
