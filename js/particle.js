@@ -44,8 +44,8 @@ class Particle {
 
     update(cnv) {
         this.draw(cnv);
-        this.velocity.x *= friction;
-        this.velocity.y *= friction;
+        this.velocity.x *= FRICTION;
+        this.velocity.y *= FRICTION;
         this.x = this.x + this.velocity.x;
         this.y = this.y + this.velocity.y;
         this.alpha -= 0.01;

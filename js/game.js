@@ -5,6 +5,8 @@ let enemies;
 let particles;
 let score;
 let currentLevel;
+let stars;
+// let starSpeed;
 
 // Projectile variables
 let projectileRadius = 8;
@@ -19,7 +21,7 @@ let spawnEnemiesInterval;
 let spawnProjectilesInterval
 
 // Game constants
-const friction = 0.99;
+const FRICTION = 0.99;
 
 // Animation TODO mudar nome
 let listener;
@@ -33,6 +35,13 @@ let lastScoreElement;
 let startGameBtn;
 let modalElement;
 let playerElement;
+
+// Star Background
+const N_STARS = 100;
+const MAX_STAR_SIZE = 0.006;
+const STAR_INI_SPEED = 0.2;
+const STAR_COLOR = "white";
+// let timeDelta, timeLast = 0;
 
 function main() { 
     // Game setup (Canvas)
@@ -104,6 +113,8 @@ function initGame(cnv) {
     score = 0;
     currentLevel = 1;
 
+    spawnStars(cnv);
+
     levelElement.html(currentLevel);
 
     updateScore(scoreElement, 0);
@@ -111,6 +122,8 @@ function initGame(cnv) {
 
     cnv.style.display = "";
     statsElement.show();
+
+    // loop();
 
     animate();
     
@@ -162,6 +175,21 @@ function updateEnemyInterval() {
     spawnEnemiesInterval = setInterval(spawnEnemies, interval > 500 ? interval : 500);
 }
 
+// Spawn Stars
+function spawnStars(cnv) {
+    stars = [];
+    for (let i = 0; i < N_STARS; i++) {
+        // console.log("entrou")
+        // Star variables
+        let r = Math.random() * MAX_STAR_SIZE * cnv.height / 2;
+        let x = Math.floor(Math.random() * cnv.width);
+        let y = Math.floor(Math.random() * cnv.height);
+        let v = Math.min((3*Math.pow(1.05, currentLevel)), 5) * 0.4 + r * 0.6 ;
+        // let v = STAR_INI_SPEED * cnv.height;
+        
+        stars.push(new Star(x, y, r, STAR_COLOR, v));
+    }
+}
 
 // Spawn enemies
 function spawnEnemies() {
@@ -175,7 +203,7 @@ function spawnEnemies() {
     let enemyVelocity = {
         x: 0,
         y: Math.min((3*Math.pow(1.05, currentLevel)), 5)
-    };
+    };    
     
     let palavra = null;
     enemies.push(new Enemy(enemyX, enemyY, EnemyRadius, enemyColor, enemyVelocity, palavra));
@@ -197,7 +225,7 @@ function animate() {
     const c = cnv.getContext('2d'); // Context
 
     animationId = requestAnimationFrame(animate);
-
+    
     // Resizing frame
     if(cnv.width !== innerWidth || cnv.height !== innerHeight){
         cnv.width = innerWidth;
@@ -212,6 +240,13 @@ function animate() {
 
     player.draw();
 
+    // Draw and update stars
+    for (let i = 0; i < N_STARS; i++) {
+        // console.log("here")
+        stars[i].update(cnv);
+    }
+
+    // Draw particles
     for(let i in particles) {
         let particle = particles[i];
         if(particle.alpha <= 0) {
@@ -235,7 +270,6 @@ function animate() {
             }, 0); 
         }
     }
-
 
     // Draws and deletes enemies
     // Check game over and projectile collision
@@ -301,3 +335,27 @@ function animate() {
         }
     }    
 }
+
+// function loop(timeNow) {
+//     // Call next frame
+//     requestAnimationFrame(loop);
+
+//     if(timeNow) {
+//         const cnv = document.querySelector('canvas');
+//         const c = cnv.getContext('2d'); // Context
+    
+//         // Calculate Time Difference
+//         timeDelta = timeNow - timeLast;
+//         timeLast = timeNow;
+    
+//         // Cleans background
+//         c.fillStyle = 'rgba(0, 0, 0)'; 
+//         c.fillRect(0, 0, cnv.width, cnv.height);
+    
+//         // Draw and update stars
+//         c.fillStyle = "white";
+//         for (let i = 0; i < N_STARS; i++) {
+//             stars[i].update(cnv);
+//         }
+//     }
+// }

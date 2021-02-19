@@ -16,8 +16,8 @@ class Player {
 
     draw() {
         playerElement.show();
-        playerElement[0].style.left = `${this.x}px`;
-        playerElement[0].style.top = `${this.y+this.h/2}px`;
+        playerElement[0].style.left = `${this.x - this.w/2}px`;
+        playerElement[0].style.top = `${this.y}px`;
         
         // c.beginPath();
         // //c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
@@ -33,10 +33,9 @@ class Player {
     update(e, cnv) {
         if(e.targetTouches !== undefined ) {
             let touchX = e.targetTouches[0].pageX;
-            if(touchX > this.w/2 && touchX < cnv.width - this.w/2 ) { 
+            if(touchX > this.w/2 && touchX < cnv.width - this.w/2) { 
                 this.x = touchX;
             }
-           
         }
         
         if(e.clientX > this.w/2 && e.clientX < cnv.width - this.w/2 ) {
