@@ -13,13 +13,12 @@ let spawnProjectilesInterval
 // Game constants
 const friction = 0.99;
 
-// Animation
-let animationId;
+// Animation TODO mudar nome
 let listener;
 let numParticlesRatio = 2;
 
 // Game elements
-let stats;
+let statsElement;
 let scoreElement;
 let levelElement;
 let lastScoreElement;
@@ -36,7 +35,7 @@ function main() {
     cnv.height = innerHeight;
 
     // Game elements
-    stats = $('#stats');
+    statsElement = $('#stats');
     scoreElement = $('#score');
     levelElement = $('#level');
     lastScoreElement = $('#lastScore');
@@ -46,15 +45,13 @@ function main() {
     playerElement = $("#player");
    
     playerElement.hide();
-    stats.hide();
-
-    // Game variables
+    statsElement.hide();
 
     // EVENTS 
     listener = function (event){
         player.update(event);
     }
-
+    
     // Init Game Button
     // Mobile
     startGameBtn.addEventListener('touchend', (event) => {
@@ -106,7 +103,7 @@ function initGame(cnv) {
     updateScore(lastScoreElement, 0);
 
     cnv.style.display = "";
-    stats.show();
+    statsElement.show();
 
     animate();
     
@@ -134,7 +131,7 @@ function endGame() {
     cnv.style.display = "none";
 
     playerElement.hide();
-    stats.hide();
+    statsElement.hide();
 }
 
 // Increase score
@@ -161,7 +158,7 @@ function updateEnemyInterval() {
 
 // Spawn enemies
 function spawnEnemies() {
-        let h = parseFloat(stats.css('height'));
+        let h = parseFloat(statsElement.css('height'));
         let maxEnemyRadius = 50; 
         let EnemyRadius = Math.random() * (maxEnemyRadius - 10) + 10;
         let enemyX = Math.random() * (cnv.width - 2*maxEnemyRadius) + maxEnemyRadius; 
@@ -173,7 +170,6 @@ function spawnEnemies() {
         };
         
         let palavra = null;
-    
         enemies.push(new Enemy(enemyX, enemyY, EnemyRadius, enemyColor, enemyVelocity, palavra));
 }
 
