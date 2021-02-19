@@ -23,7 +23,7 @@ let animationId;
  let lastScoreElement;
  let startGameBtn;
  let modalElement;
-//  let propostasElement; // TODO
+//  let propostapropostasElement; // TODO
 
 //  let palavrasDiv; // TODO
  let playerElement;
@@ -132,7 +132,7 @@ function initGame(cnv) {
 
     levelElement.html(currentLevel);
 
-    let propostasIndex = 0;
+    // let propostasIndex = 0; // TODO
 
     updateScore(scoreElement, score, 0);
     updateScore(lastScoreElement, score, 0);
