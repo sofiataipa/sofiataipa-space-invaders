@@ -13,7 +13,9 @@ class Particle {
         //this.pastXY = [];
     }
 
-    draw() {
+    draw(cnv) {
+        const c = cnv.getContext('2d'); // Context
+
         c.save();
         c.globalAlpha = this.alpha;
         c.beginPath();
@@ -40,8 +42,8 @@ class Particle {
         c.restore();
     }
 
-    update() {
-        this.draw();
+    update(cnv) {
+        this.draw(cnv);
         this.velocity.x *= friction;
         this.velocity.y *= friction;
         this.x = this.x + this.velocity.x;

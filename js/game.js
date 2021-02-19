@@ -6,6 +6,14 @@ let particles;
 let score;
 let currentLevel;
 
+// Projectile variables
+let projectileRadius = 8;
+let projectileColor = 'rgb(200, 220, 220)';  //'rgb(150, 40, 40)';
+let projectileVelocity = 5;
+
+// Particle variables
+let particleRadius = 2;
+
 // Intervals for timeout
 let spawnEnemiesInterval;
 let spawnProjectilesInterval
@@ -29,7 +37,6 @@ let playerElement;
 function main() { 
     // Game setup (Canvas)
     const cnv = document.querySelector('canvas');
-    const c = cnv.getContext('2d'); // Context
 
     cnv.width = innerWidth;
     cnv.height = innerHeight;
@@ -49,18 +56,18 @@ function main() {
 
     // EVENTS 
     listener = function (event){
-        player.update(event);
+        player.update(event, cnv);
     }
-    
+
     // Init Game Button
     // Mobile
     startGameBtn.addEventListener('touchend', (event) => {
-        initGame();
+        initGame(cnv);
     });
     
     // Computer
     startGameBtn.addEventListener('click', (event) => {
-        initGame();
+        initGame(cnv);
     });
     
     // Window on stand-by event
@@ -118,7 +125,7 @@ function initGame(cnv) {
     spawnProjectilesInterval = setInterval(spawnProjectiles, 300);
 }
 
-function endGame() {
+function endGame(cnv) {
     clearInterval(spawnEnemiesInterval);
     clearInterval(spawnProjectilesInterval);
 
@@ -158,41 +165,37 @@ function updateEnemyInterval() {
 
 // Spawn enemies
 function spawnEnemies() {
-        let h = parseFloat(statsElement.css('height'));
-        let maxEnemyRadius = 50; 
-        let EnemyRadius = Math.random() * (maxEnemyRadius - 10) + 10;
-        let enemyX = Math.random() * (cnv.width - 2*maxEnemyRadius) + maxEnemyRadius; 
-        let enemyY = h - maxEnemyRadius;
-        let enemyColor = `hsl(${Math.random()*360}, 40%, 50%)`;
-        let enemyVelocity = {
-            x: 0,
-            y: Math.min((3*Math.pow(1.05, currentLevel)), 5)
-        };
-        
-        let palavra = null;
-        enemies.push(new Enemy(enemyX, enemyY, EnemyRadius, enemyColor, enemyVelocity, palavra));
+    const cnv = document.querySelector('canvas');
+    let h = parseFloat(statsElement.css('height'));
+    let maxEnemyRadius = 50; 
+    let EnemyRadius = Math.random() * (maxEnemyRadius - 10) + 10;
+    let enemyX = Math.random() * (cnv.width - 2*maxEnemyRadius) + maxEnemyRadius; 
+    let enemyY = h - maxEnemyRadius;
+    let enemyColor = `hsl(${Math.random()*360}, 40%, 50%)`;
+    let enemyVelocity = {
+        x: 0,
+        y: Math.min((3*Math.pow(1.05, currentLevel)), 5)
+    };
+    
+    let palavra = null;
+    enemies.push(new Enemy(enemyX, enemyY, EnemyRadius, enemyColor, enemyVelocity, palavra));
 }
 
 // Spawn projectiles
 function spawnProjectiles() {
-    // Projectile variables
-    let projectileRadius = 8;
-    let projectileColor = 'rgb(200, 220, 220)';  //'rgb(150, 40, 40)';
-    let projectileVelocity = 5;
-
     projectiles.push(new Projectile(player.x, player.y -17, projectileRadius, projectileColor, projectileVelocity)); 
 }
 
 // Spawn particles
-function spawnParticles(posx, posy) {
-    // Particle variables
-    let particleRadius = 2;
-
-    particles.push(new Particle(posx, posy, particleRadius, enemy.color));
+function spawnParticles(posx, posy, color) {
+    particles.push(new Particle(posx, posy, particleRadius, color));
 }
 
 // Animates frame by frame
 function animate() {
+    const cnv = document.querySelector('canvas');
+    const c = cnv.getContext('2d'); // Context
+
     animationId = requestAnimationFrame(animate);
 
     // Resizing frame
@@ -215,7 +218,7 @@ function animate() {
             particles.splice(i, 1);
         }
         else {
-            particle.update();
+            particle.update(cnv);
         }
     }
 
@@ -223,7 +226,7 @@ function animate() {
     for(let i in projectiles) {
         let projectile = projectiles[i];
         
-        projectile.update();
+        projectile.update(cnv);
 
         // Remove projectile from edges of the screen
         if(projectile.y + projectile.radius < 0) {
@@ -238,7 +241,7 @@ function animate() {
     // Check game over and projectile collision
     for(let i in enemies) {
         let enemy = enemies[i];
-        enemy.update();
+        enemy.update(cnv);
 
         // Collision detection (player and enemy) - Game over
         let dist = Math.hypot(player.x - enemy.x, player.y - enemy.y); 
@@ -249,7 +252,7 @@ function animate() {
             updateScore(lastScoreElement, 0);
             modalElement.addClass('d-flex');
             modalElement.removeClass('d-none');
-            endGame();
+            endGame(cnv);
            
         }
 
@@ -280,7 +283,7 @@ function animate() {
                     setTimeout(() => {
                         // Explosion effect
                         for(let i=0; i < enemy.radius * numParticlesRatio; i++) {
-                            spawnParticles(projectile.x, projectile.y);
+                            spawnParticles(projectile.x, projectile.y, enemy.color);
                         }               
                         enemies.splice(i, 1);
                         projectiles.splice(j, 1);
@@ -294,7 +297,7 @@ function animate() {
             $(`#${enemy.id}`).remove();
             cancelAnimationFrame(animationId);
             updateScore(lastScoreElement, 0);
-            endGame();          
+            endGame(cnv);          
         }
     }    
 }

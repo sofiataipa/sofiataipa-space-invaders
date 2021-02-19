@@ -17,7 +17,9 @@ class Enemy {
         }
     }
 
-    draw() {
+    draw(cnv) {
+        const c = cnv.getContext('2d'); // Context
+
         c.beginPath();
         c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
         c.fillStyle =  this.color;//'rgba(255,255,255,10)'// //'rgba(0,0,0,0)';
@@ -46,8 +48,8 @@ class Enemy {
         }
     }
 
-    update() {
-        this.draw();
+    update(cnv) {
+        this.draw(cnv);
         this.x = this.x + this.velocity.x;
         this.y = this.y + this.velocity.y;
     }

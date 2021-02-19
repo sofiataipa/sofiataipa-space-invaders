@@ -12,7 +12,9 @@ class Projectile {
         this.w = this.radius * 0.7
     }
 
-    draw() {
+    draw(cnv) {
+        const c = cnv.getContext('2d'); // Context
+
         c.beginPath();
 
         let a = 0.7;
@@ -25,7 +27,6 @@ class Projectile {
                 c.fillStyle = `rgba(${r},${g},${b}, ${a})`;
                 c.arc(this.x, this.pastY[i], this.radius, 0, Math.PI*2, false); 
                 a -= 0.08;
-                c.
                 c.fill();
             }
             else {
@@ -46,8 +47,8 @@ class Projectile {
         
     }
 
-    update() {
-        this.draw();
+    update(cnv) {
+        this.draw(cnv);
         this.y = this.y - this.velocity;
         // Saves the last y position to create a trail effect
         this.pastY.push(this.y);

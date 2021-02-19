@@ -30,16 +30,16 @@ class Player {
         // c.fill();
     }
 
-    update(e) {
+    update(e, cnv) {
         if(e.targetTouches !== undefined ) {
             let touchX = e.targetTouches[0].pageX;
-            if(touchX > this.w/2 && touchX < canvas.width - this.w/2 ) { 
+            if(touchX > this.w/2 && touchX < cnv.width - this.w/2 ) { 
                 this.x = touchX;
             }
            
         }
         
-        if(e.clientX > this.w/2 && e.clientX < canvas.width - this.w/2 ) {
+        if(e.clientX > this.w/2 && e.clientX < cnv.width - this.w/2 ) {
             this.x = e.clientX;  
         } 
     }
