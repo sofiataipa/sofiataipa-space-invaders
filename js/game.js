@@ -1,13 +1,27 @@
+// Game variables
+let player;
+let projectiles;
+let enemies;
+let particles;
+let propostas; 
+
 let spawnEnemiesInterval;
 
+// Game constants
+const friction = 0.99;
+
+// Animation
+let animationId;
+
 function main() { 
-    // Game setup
-    const canvas = document.querySelector('canvas');
-    const c = canvas.getContext('2d'); // Context
+    // Game setup (Canvas)
+    const cnv = document.querySelector('canvas');
+    const c = cnv.getContext('2d'); // Context
 
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
+    cnv.width = innerWidth;
+    cnv.height = innerHeight;
 
+    // Game elements
     const stats = $('#stats');
     const scoreElement = $('#score');
     const levelElement = $('#level');
@@ -18,6 +32,7 @@ function main() {
 
     const palavrasDiv = $('#palavras');
     const playerElement = $("#player");
+   
     palavrasDiv.hide();
     playerElement.hide();
     stats.hide();
@@ -25,13 +40,11 @@ function main() {
     //modalElement.style.display = 'none !important';
     //const modalElement = document.querySelector('#modal');
 
-    const friction = 0.99;
-
     // Player variables
     let playerW = parseFloat(playerElement.css('width'));
     let playerH = parseFloat(playerElement.css('height'));
-    let playerX = canvas.width/2;
-    let playerY = canvas.height - (playerH);
+    let playerX = cnv.width/2;
+    let playerY = cnv.height - (playerH);
     let playerColor = 'white';
 
     // Projectile variables
@@ -45,14 +58,13 @@ function main() {
     let particleRadius = 2;
 
     // Game variables
-    let player = new Player(playerX, playerY, playerW, playerH, playerColor);
-    let projectiles = [];
-    let enemies = [];
-    let particles  = [];
-    let propostas = getPropostas(); 
+    // player = new Player(playerX, playerY, playerW, playerH, playerColor);
+    // projectiles = [];
+    // enemies = [];
+    // particles  = [];
+    propostas = getPropostas(); 
 
     let propostasShuffled = shuffleArray(propostas);;
-    let propostasIndex = 0;
     // First text always first
     // propostasElement.html(propostas[propostasIndex]);
 
@@ -61,25 +73,28 @@ function main() {
     let palavrasShuffled = shuffleArray(palavras);
     let palavrasIndex = 0;
 
-    let animationId;
-    let score = 0;
     let currentLevel = 1;
 
+    // EVENTS 
+
+    // Init Game Button
+    // Mobile
     startGameBtn.addEventListener('touchend', (event) => {
         initGame();
     });
     
+    // Computer
     startGameBtn.addEventListener('click', (event) => {
         initGame();
     });
     
+    // Window on stand-by event
     document.addEventListener('visibilitychange', function() {
         if(document.hidden) {
             // Tab is now inactive
             clearInterval(spawnEnemiesInterval);
             clearInterval(spawnProjectilesInterval);
         }
-        
         else {
             // Tab is active again
             spawnProjectilesInterval = setInterval(spawnProjectiles, 300);
@@ -88,19 +103,23 @@ function main() {
     });
 }
 
-function initGame() {  
+function initGame(cnv, score, stats, scoreElement, palavrasDiv, lastScoreElement, propostasElement, modalElement) {  
+    // Game Variables
     player = new Player(playerX, playerY, playerW, playerH, playerColor);
     projectiles = [];
     enemies = [];
     particles  = [];
-    score = 0;
+
+    let score = 0;
     currentLevel = 1;
     levelElement.html(currentLevel);
 
-    updateScore(scoreElement, 0);
-    updateScore(lastScoreElement, 0);
+    let propostasIndex = 0;
 
-    canvas.style.display = "";
+    updateScore(scoreElement, score, 0);
+    updateScore(lastScoreElement, score, 0);
+
+    cnv.style.display = "";
     stats.show();
     palavrasDiv.show();
    
@@ -109,6 +128,7 @@ function initGame() {
     //     //tirar link maybe
     // }
     propostasIndex++;
+
     if(propostasIndex == propostasShuffled.length) {
         propostasIndex = 0;
     }
@@ -140,7 +160,7 @@ function endGame() {
     window.removeEventListener('touchstart', listener, false);
     modalElement.addClass('d-flex');
     modalElement.removeClass('d-none');
-    canvas.style.display = "none";
+    cnv.style.display = "none";
     playerElement.hide();
     stats.hide();
     palavrasDiv.hide();
@@ -169,12 +189,12 @@ function shuffleArray(array) {
 }
 
  // Increase score
-function updateScore(scoreEl, value) {
+function updateScore(scoreEl, score, value) {
     score += value;
     scoreEl.html(score);
 }
 
-function updateLevel() {
+function updateLevel(currentLevel, score) {
     let nextLevelScore = Math.round(2500 * Math.pow(currentLevel, 1.5));
     if(score > nextLevelScore) {
         currentLevel++;
@@ -198,7 +218,7 @@ function spawnEnemies() {
         let h = parseFloat(stats.css('height'));
         let maxEnemyRadius = 50; 
         let EnemyRadius = Math.random() * (maxEnemyRadius - 10) + 10;
-        let enemyX = Math.random() * (canvas.width - 2*maxEnemyRadius) + maxEnemyRadius; 
+        let enemyX = Math.random() * (cnv.width - 2*maxEnemyRadius) + maxEnemyRadius; 
         let enemyY = h - maxEnemyRadius;
         let enemyColor = `hsl(${Math.random()*360}, 40%, 50%)`;
         let enemyVelocity = {
@@ -228,14 +248,14 @@ function animate() {
     animationId = requestAnimationFrame(animate);
 
     // Resizing frame
-    if(canvas.width !== innerWidth || canvas.height !== innerHeight){
-        canvas.width = innerWidth;
-        canvas.height = innerHeight;
+    if(cnv.width !== innerWidth || cnv.height !== innerHeight){
+        cnv.width = innerWidth;
+        cnv.height = innerHeight;
     }  
     
     // Cleans background
     c.fillStyle = 'rgba(0, 0, 0)'; 
-    c.fillRect(0, 0, canvas.width, canvas.height);
+    c.fillRect(0, 0, cnv.width, cnv.height);
     
     updateLevel();
 
@@ -279,7 +299,7 @@ function animate() {
             ( (enemy.y > player.y) && (enemy.x > player.x - player.w/4)  && (enemy.x < player.x + player.w/4) ) ) {
             $(`#${enemy.id}`).remove();
             cancelAnimationFrame(animationId);
-            updateScore(lastScoreElement, 0);
+            updateScore(lastScoreElement, score, 0);
             modalElement.addClass('d-flex');
             modalElement.removeClass('d-none');
             endGame();
@@ -295,7 +315,7 @@ function animate() {
 
                 // Shrink if big enough
                 if(enemy.radius - 20 > 10 ) {
-                    updateScore(scoreElement, Math.round(3*enemy.radius));
+                    updateScore(scoreElement, score, Math.round(3*enemy.radius));
 
                     // Interpolate
                     gsap.to(enemy, {
@@ -308,7 +328,7 @@ function animate() {
                 }
                 // Remove from scene
                 else {
-                    updateScore(scoreElement, Math.round(15*enemy.radius));
+                    updateScore(scoreElement, score, Math.round(15*enemy.radius));
                     $(`#${enemy.id}`).remove(); 
                     setTimeout(() => {
                         // Explosion effect
@@ -323,13 +343,13 @@ function animate() {
         }
 
         // Remove enemy from edges of the screen - Game over
-        if(enemy.y + enemy.radius > canvas.height) {
+        if(enemy.y + enemy.radius > cnv.height) {
             // setTimeout(() => {
             //     enemies.splice(i, 1);
             // }, 0); 
             $(`#${enemy.id}`).remove();
             cancelAnimationFrame(animationId);
-            updateScore(lastScoreElement, 0);
+            updateScore(lastScoreElement, score, 0);
             endGame();          
         }
     }
