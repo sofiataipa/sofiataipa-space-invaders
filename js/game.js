@@ -3,6 +3,8 @@ let player;
 let projectiles;
 let enemies;
 let particles;
+let score;
+let currentLevel;
 
 // Intervals for timeout
 let spawnEnemiesInterval;
@@ -14,6 +16,7 @@ const friction = 0.99;
 // Animation
 let animationId;
 let listener;
+let numParticlesRatio = 2;
 
 // Game elements
 let stats;
@@ -44,23 +47,6 @@ function main() {
    
     playerElement.hide();
     stats.hide();
-
-    // Player variables
-    let playerW = parseFloat(playerElement.css('width'));
-    let playerH = parseFloat(playerElement.css('height'));
-    let playerX = cnv.width/2;
-    let playerY = cnv.height - (playerH);
-    let playerColor = 'white';
-
-    // Projectile variables
-    let projectileRadius = 8;
-    //let projectileColor = 'rgb(150, 40, 40)';
-    let projectileColor = 'rgb(200, 220, 220)';
-    let projectileVelocity = 5;
-
-    // Particle variables
-    let numParticlesRatio = 2;
-    let particleRadius = 2;
 
     // Game variables
 
@@ -95,20 +81,29 @@ function main() {
     });
 }
 
-function initGame(cnv) {  
-    // Game Variables
+function initGame(cnv) { 
+    // Player variables
+    let playerW = parseFloat(playerElement.css('width'));
+    let playerH = parseFloat(playerElement.css('height'));
+    let playerX = cnv.width/2;
+    let playerY = cnv.height - (playerH);
+    let playerColor = 'white';
+
+    // Create player
     player = new Player(playerX, playerY, playerW, playerH, playerColor);
+    
+    // Game Variables
     projectiles = [];
     enemies = [];
     particles  = [];
 
-    let score = 0;
-    let currentLevel = 1;
+    score = 0;
+    currentLevel = 1;
 
     levelElement.html(currentLevel);
 
-    updateScore(scoreElement, score, 0);
-    updateScore(lastScoreElement, score, 0);
+    updateScore(scoreElement, 0);
+    updateScore(lastScoreElement, 0);
 
     cnv.style.display = "";
     stats.show();
@@ -142,31 +137,13 @@ function endGame() {
     stats.hide();
 }
 
-function shuffleArray(array) {
-    let indexes = []
-    let shuffledArray = [];
-
-    for(let i=0; i < array.length-1; i++) {
-        indexes.push(i); 
-    }
-
-    // Gera um indice aleatório, adiciona a carta do deck ao
-    // shuffled deck e elimina esse índice das opções
-    for(let i=0; i < array.length-1; i++) {
-        let index = Math.floor(Math.random() * indexes.length);
-        shuffledArray.push(array[indexes[index]]);
-        indexes.splice(index, 1);
-    }
-    return shuffledArray;
-}
-
- // Increase score
-function updateScore(scoreEl, score, value) {
+// Increase score
+function updateScore(scoreEl, value) {
     score += value;
     scoreEl.html(score);
 }
 
-function updateLevel(currentLevel, score) {
+function updateLevel() {
     let nextLevelScore = Math.round(2500 * Math.pow(currentLevel, 1.5));
     if(score > nextLevelScore) {
         currentLevel++;
@@ -202,7 +179,20 @@ function spawnEnemies() {
 
 // Spawn projectiles
 function spawnProjectiles() {
+    // Projectile variables
+    let projectileRadius = 8;
+    let projectileColor = 'rgb(200, 220, 220)';  //'rgb(150, 40, 40)';
+    let projectileVelocity = 5;
+
     projectiles.push(new Projectile(player.x, player.y -17, projectileRadius, projectileColor, projectileVelocity)); 
+}
+
+// Spawn particles
+function spawnParticles(posx, posy) {
+    // Particle variables
+    let particleRadius = 2;
+
+    particles.push(new Particle(posx, posy, particleRadius, enemy.color));
 }
 
 // Animates frame by frame
@@ -231,7 +221,6 @@ function animate() {
         else {
             particle.update();
         }
-       
     }
 
     // Draw and deletes projectiles
@@ -261,7 +250,7 @@ function animate() {
             ( (enemy.y > player.y) && (enemy.x > player.x - player.w/4)  && (enemy.x < player.x + player.w/4) ) ) {
             $(`#${enemy.id}`).remove();
             cancelAnimationFrame(animationId);
-            updateScore(lastScoreElement, score, 0);
+            updateScore(lastScoreElement, 0);
             modalElement.addClass('d-flex');
             modalElement.removeClass('d-none');
             endGame();
@@ -277,7 +266,7 @@ function animate() {
 
                 // Shrink if big enough
                 if(enemy.radius - 20 > 10 ) {
-                    updateScore(scoreElement, score, Math.round(3*enemy.radius));
+                    updateScore(scoreElement, Math.round(3*enemy.radius));
 
                     // Interpolate
                     gsap.to(enemy, {
@@ -290,12 +279,12 @@ function animate() {
                 }
                 // Remove from scene
                 else {
-                    updateScore(scoreElement, score, Math.round(15*enemy.radius));
+                    updateScore(scoreElement, Math.round(15*enemy.radius));
                     $(`#${enemy.id}`).remove(); 
                     setTimeout(() => {
                         // Explosion effect
-                        for(let i=0; i < enemy.radius* numParticlesRatio; i++) {
-                            particles.push(new Particle(projectile.x, projectile.y, particleRadius, enemy.color));
+                        for(let i=0; i < enemy.radius * numParticlesRatio; i++) {
+                            spawnParticles(projectile.x, projectile.y);
                         }               
                         enemies.splice(i, 1);
                         projectiles.splice(j, 1);
@@ -308,7 +297,7 @@ function animate() {
         if(enemy.y + enemy.radius > cnv.height) {
             $(`#${enemy.id}`).remove();
             cancelAnimationFrame(animationId);
-            updateScore(lastScoreElement, score, 0);
+            updateScore(lastScoreElement, 0);
             endGame();          
         }
     }    
