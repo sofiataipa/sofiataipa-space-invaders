@@ -2,7 +2,6 @@
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d'); // Context
 
-
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
@@ -23,218 +22,7 @@ stats.hide();
 //modalElement.style.display = 'none !important';
 //const modalElement = document.querySelector('#modal');
 
-
-// Player
-class Player {
-    constructor(x, y, w, h, color) {
-        this.x = x;
-        this.y = y;
-        this.w = w;
-        this.h = h;
-        this.color = color;
-        // this.image = new Image;
-        // this.image.src = './assets/Rapaz parte de cima.png';
-        // c.webkitImageSmoothingEnabled = false;
-        // c.mozImageSmoothingEnabled = false;
-        // c.msImageSmoothingEnabled = false;
-        // c.imageSmoothingEnabled = false;
-    }
-
-    draw() {
-        playerElement.show();
-        playerElement[0].style.left = `${this.x}px`;
-        playerElement[0].style.top = `${this.y+this.h/2}px`;
-        
-        // c.beginPath();
-        // //c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
-        // c.rect(this.x-this.w/2, this.y, this.w, this.h);
-        // //c.drawImage(this.image, this.x-this.w/2, this.y, this.w, this.h);
-        // c.strokeStyle = this.color;
-        // c.stroke();
-        // c.fillStyle = 'rgba(0,0,0,0)';
-        // //c.fillStyle = this.color;
-        // c.fill();
-    }
-
-    update(e) {
-        if(e.targetTouches !== undefined ) {
-            let touchX = e.targetTouches[0].pageX;
-            if(touchX > this.w/2 && touchX < canvas.width - this.w/2 ) { 
-                this.x = touchX;
-            }
-           
-        }
-        
-        if(e.clientX > this.w/2 && e.clientX < canvas.width - this.w/2 ) {
-            this.x = e.clientX;  
-        } 
-    }
-}
-
-// Projectile
-class Projectile {
-    constructor(x, y, radius, color, velocity) {
-        this.x = x;
-        this.y = y;
-        this.radius = radius;
-        this.color = color;
-        this.velocity = velocity;
-        this.pastY = [];
-        this.image = new Image;
-        this.image.src = './assets/Logo 5.png';
-        this.w = this.radius * 0.7
-    }
-
-    draw() {
-        c.beginPath();
-
-        let a = 0.7;
-        for(let i=this.pastY.length; i>=0; i--) {
-            if(a > 0) {
-                var rgb = this.color.match(/\d+/g);
-                let r = rgb[0];
-                let g = rgb[1];
-                let b = rgb[2];
-                c.fillStyle = `rgba(${r},${g},${b}, ${a})`;
-                c.arc(this.x, this.pastY[i], this.radius, 0, Math.PI*2, false); 
-                a -= 0.08;
-                c.fill();
-            }
-            else {
-                this.pastY.splice(i, 1);
-            }
-        }
-        c.closePath();
-
-        c.beginPath();
-
-        c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
-        c.fillStyle = this.color;
-        c.fill();
-
-        c.drawImage(this.image, this.x-this.w, this.y-this.w, this.w*2, this.w*2);
-        // Create a trail effect
-        c.closePath();
-        
-    }
-
-    update() {
-        this.draw();
-        this.y = this.y - this.velocity;
-        // Saves the last y position to create a trail effect
-        this.pastY.push(this.y);
-    }
-}
-
-// Enemy
-class Enemy {
-    constructor(x, y, radius, color, velocity, palavra) {
-        this.x = x;
-        this.y = y;
-        this.radius = radius;
-        this.color = color;
-        this.velocity = velocity;
-        this.palavra = palavra;
-        
-        if(this.palavra !== null) {
-            this.id = palavra.replace(/[^a-zA-Z]+/g, '');
-            palavrasDiv.append(`<span id="${this.id}" class="user-select-none m-0 p-0 text-light text-center palavra">${this.palavra}</span>`)
-        } 
-        else {
-            this.id = null;
-        }
-    }
-
-    draw() {
-        c.beginPath();
-        c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
-        c.fillStyle =  this.color;//'rgba(255,255,255,10)'// //'rgba(0,0,0,0)';
-        //c.strokeStyle = this.color;
-        //c.stroke();
-        c.fill();
-        c.closePath();
-
-        if(this.palavra !== null) {
-            let tag = `#${this.id}`;
-            let w = parseFloat($(tag).css('width'));
-            let h = parseFloat($(tag).css('height'));
-            if($(tag)[0] != undefined){
-                $(tag)[0].style.left = `${this.x-w/2}px`;
-                $(tag)[0].style.top = `${this.y-h/2}px`;   
-                // if(this.radius < 20) {   
-                //     $(tag).remove();
-                //     this.palavra = null;
-                // }
-                if(w > this.radius*2) {
-                    $(tag).remove();
-                    this.palavra = null;
-                    this.id = null;
-                }
-            }
-        }
-    }
-
-    update() {
-        this.draw();
-        this.x = this.x + this.velocity.x;
-        this.y = this.y + this.velocity.y;
-    }
-}
-
 const friction = 0.99;
-// Particle
-class Particle {
-    constructor(x, y, radius, color) {
-        this.x = x;
-        this.y = y;
-        this.radius = (radius - 1) * Math.random() + 1;
-        this.color = color;
-        this.velocity = { 
-            x: (Math.random() - 0.5) * (Math.random() * (6 - 0) + 0),
-            y: (Math.random() - 0.5) * (Math.random() * (6 - 0) + 0)
-        };
-        this.alpha = 1;
-        //this.pastXY = [];
-    }
-
-    draw() {
-        c.save();
-        c.globalAlpha = this.alpha;
-        c.beginPath();
-        c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
-        c.fillStyle = this.color;
-        c.fill();
-
-        // // Trail effect
-        // let a = 0.7;
-        // for(let i=this.pastXY.length-1; i>=0; i--) {
-        //     if(a > 0) {
-        //         let r = parseInt(this.color.slice(1, 3), 16);
-        //         let g = parseInt(this.color.slice(3, 5), 16);
-        //         let b = parseInt(this.color.slice(5, 7), 16);
-        //         c.fillStyle = `rgba(${r},${g},${b}, ${a})`;
-        //         c.arc(this.pastXY[i][0], this.pastXY[i][1], this.radius, 0, Math.PI*2, false); 
-        //         a -= 0.08;
-        //         c.fill();
-        //     }
-        //     else {
-        //         this.pastXY.splice(i, 1);
-        //     }
-        // }
-        c.restore();
-    }
-
-    update() {
-        this.draw();
-        this.velocity.x *= friction;
-        this.velocity.y *= friction;
-        this.x = this.x + this.velocity.x;
-        this.y = this.y + this.velocity.y;
-        this.alpha -= 0.01;
-        //this.pastXY.push([this.x, this.y]);
-    }
-}
-
 
 // Player variables
 let playerW = parseFloat(playerElement.css('width'));
@@ -269,7 +57,6 @@ let palavras = getPalavras();
 
 let palavrasShuffled = shuffleArray(palavras);
 let palavrasIndex = 0;
-
 
 function initGame() {  
     player = new Player(playerX, playerY, playerW, playerH, playerColor);
@@ -375,7 +162,6 @@ function updateEnemyInterval() {
 let spawnEnemiesInterval;
 // Spawn enemies
 function spawnEnemies() {
-        
         if(palavrasIndex == palavrasShuffled.length) {
             palavrasIndex = 0;
         }
