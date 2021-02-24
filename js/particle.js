@@ -7,8 +7,16 @@ class Particle extends MovingObject {
             x: (Math.random() - 0.5) * (Math.random() * (6 - 0) + 0),
             y: (Math.random() - 0.5) * (Math.random() * (6 - 0) + 0)
         };
-
         super(x, y, radius, color, velocity);
+        this.alpha = 1;
+    }
+
+    draw(cnv) {
+        const c = cnv.getContext('2d'); // Context
+        c.save();
+        c.globalAlpha = this.alpha;
+        super.draw(cnv);
+        c.restore();
     }
 
     update(cnv) {

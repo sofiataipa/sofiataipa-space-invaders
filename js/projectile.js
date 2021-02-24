@@ -42,7 +42,6 @@ class Projectile extends MovingObject {
         
         // Create a trail effect
         c.closePath();
-        
     }
 
     update(cnv) {

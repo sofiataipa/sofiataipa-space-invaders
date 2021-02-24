@@ -43,11 +43,10 @@ const MAX_STAR_SIZE = 0.7;
 const MIN_STAR_SIZE = 2;
 const STAR_INI_SPEED = 0.2;
 const STAR_COLOR = "rgb(255, 255, 255)";
-// let timeDelta, timeLast = 0;
 
 function main() { 
     // Game setup (Canvas)
-    const cnv = document.querySelector('canvas');
+    const cnv = document.getElementById('game');
 
     cnv.width = innerWidth;
     cnv.height = innerHeight;
@@ -69,7 +68,6 @@ function main() {
     listener = function (event){
         player.update(event, cnv);
     }
-
     // Init Game Button
     // Mobile
     startGameBtn.addEventListener('touchend', (event) => {
@@ -125,8 +123,6 @@ function initGame(cnv) {
     cnv.style.display = "";
     statsElement.show();
 
-    // loop();
-
     animate();
     
     updateEnemyInterval();
@@ -180,6 +176,7 @@ function updateEnemyInterval() {
 
 // Spawn Stars
 function spawnStars(cnv) {
+    
     stars = [];
     for (let i = 0; i < N_STARS; i++) {
         // console.log("entrou")
@@ -200,6 +197,11 @@ function updateStarsVelocity() {
     for (let i = 0; i < N_STARS; i++) {
         stars[i].setVelocity(Math.min((3*Math.pow(1.05, currentLevel)), 5) + stars[i].dim * 0.6);
     }
+}
+
+// Desenha as estrelas num canvas
+function drawStars(cnv) {
+   
 }
 
 // Spawn enemies
@@ -253,7 +255,6 @@ function animate() {
 
     // Draw and update stars
     for (let i = 0; i < N_STARS; i++) {
-        // console.log("here")
         stars[i].update(cnv);
     }
 

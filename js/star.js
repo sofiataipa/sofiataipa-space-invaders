@@ -4,25 +4,20 @@ class Star extends MovingObject {
     }
 
     draw(cnv) {
-        
         const c = cnv.getContext('2d'); // Context
-
-        // c.save();
         
         // linear gradient from start to end of line
         let grad = c.createLinearGradient(cnv.width/2, 0, cnv.width/2, cnv.height);
         grad.addColorStop(0, "#99C5FF");
         grad.addColorStop(1, "#9334AD");
 
-        c.globalAlpha = 0.3;
+        c.globalAlpha = 0.5;
         c.fillStyle = grad;
-        // c.fillStyle = this.color;
         c.beginPath();
         c.arc(this.x, this.y, this.dim, 0, Math.PI*2);
         c.fill();
         c.closePath();
 
-        //c.globalAlpha = 0.3;
         c.beginPath();
         c.strokeStyle = grad;
         c.lineWidth = this.dim * 1.5;
@@ -32,8 +27,6 @@ class Star extends MovingObject {
         c.closePath();
 
         c.globalAlpha = 1;
-
-        // c.restore();
     }
 
     update(cnv) {

@@ -72,10 +72,6 @@ img {
     z-index: 3;
 }
 
-#stats {
-    /* transition: 1s ease; */  
-}
-
 #pontuacao {
     opacity: 0.6;
 }
