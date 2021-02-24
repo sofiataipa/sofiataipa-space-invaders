@@ -17,8 +17,8 @@ button {
     width: 30%;
 }
 
-#lista {
-    width: 140px;
+#logo {
+    width: 160px;
 }
 
 img {
@@ -40,6 +40,17 @@ img {
   position: absolute;
   /* margin-top: -50px;
   margin-left: -50px; */
+
+  animation: rocket 0.2s ease infinite;
+}
+
+@keyframes rocket {
+    0%, 100% {
+        transform: translateY(-1px);
+    }
+    50% {
+        transform: translateY(1px);
+    }
 }
 
 .palavra {
@@ -71,7 +82,7 @@ img {
 
 #container {
     height: 83px;
-    background: black; 
+    background-color:rgba(255,255,255,0.03); 
     /* background: rgb(71, 177, 193); */
     /* background: #466469 */
     z-index: 2;
@@ -97,8 +108,8 @@ button:active {
         font-size: 13px !important;
     }
 
-    #lista {
-        width: 100px;
+    #logo {
+        width: 140px;
     }
 
     #proposta {

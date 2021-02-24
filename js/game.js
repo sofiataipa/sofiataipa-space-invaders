@@ -9,8 +9,9 @@ let stars;
 // let starSpeed;
 
 // Projectile variables
-let projectileRadius = 8;
-let projectileColor = 'rgb(200, 220, 220)';  //'rgb(150, 40, 40)';
+let projectileRadius = 4;
+let projectileColor = 'rgb(220, 159, 189)';  //'rgb(150, 40, 40)';
+// let projectileColor = 'rgb(200, 220, 220)';  //'rgb(150, 40, 40)';
 let projectileVelocity = 5;
 
 // Particle variables
@@ -38,9 +39,10 @@ let playerElement;
 
 // Star Background
 const N_STARS = 100;
-const MAX_STAR_SIZE = 0.006;
+const MAX_STAR_SIZE = 0.7;
+const MIN_STAR_SIZE = 2;
 const STAR_INI_SPEED = 0.2;
-const STAR_COLOR = "white";
+const STAR_COLOR = "rgb(255, 255, 255)";
 // let timeDelta, timeLast = 0;
 
 function main() { 
@@ -100,10 +102,10 @@ function initGame(cnv) {
     let playerH = parseFloat(playerElement.css('height'));
     let playerX = cnv.width/2;
     let playerY = cnv.height - (playerH);
-    let playerColor = 'white';
+    // let playerColor = 'white';
 
     // Create player
-    player = new Player(playerX, playerY, playerW, playerH, playerColor);
+    player = new Player(playerX, playerY, playerW);
     
     // Game Variables
     projectiles = [];
@@ -166,6 +168,7 @@ function updateLevel() {
         currentLevel++;
         levelElement.html(currentLevel);
         updateEnemyInterval();
+        updateStarsVelocity();
     }
 }
 
@@ -181,20 +184,28 @@ function spawnStars(cnv) {
     for (let i = 0; i < N_STARS; i++) {
         // console.log("entrou")
         // Star variables
-        let r = Math.random() * MAX_STAR_SIZE * cnv.height / 2;
+        let r = Math.random() * (MAX_STAR_SIZE - MIN_STAR_SIZE) + MIN_STAR_SIZE;
+        // let r = Math.random() * MAX_STAR_SIZE * cnv.height / 2;
         let x = Math.floor(Math.random() * cnv.width);
         let y = Math.floor(Math.random() * cnv.height);
-        let v = Math.min((3*Math.pow(1.05, currentLevel)), 5) * 0.4 + r * 0.6 ;
+        let v = Math.min((3*Math.pow(1.05, currentLevel)), 5) + r * 0.6;
         // let v = STAR_INI_SPEED * cnv.height;
         
         stars.push(new Star(x, y, r, STAR_COLOR, v));
     }
 }
 
+// Update stars velocity (in function of level)
+function updateStarsVelocity() {
+    for (let i = 0; i < N_STARS; i++) {
+        stars[i].setVelocity(Math.min((3*Math.pow(1.05, currentLevel)), 5) + stars[i].dim * 0.6);
+    }
+}
+
 // Spawn enemies
 function spawnEnemies() {
     const cnv = document.querySelector('canvas');
-    let h = parseFloat(statsElement.css('height'));
+    let h = 0; //parseFloat(statsElement.css('height'));
     let maxEnemyRadius = 50; 
     let EnemyRadius = Math.random() * (maxEnemyRadius - 10) + 10;
     let enemyX = Math.random() * (cnv.width - 2*maxEnemyRadius) + maxEnemyRadius; 
@@ -264,7 +275,7 @@ function animate() {
         projectile.update(cnv);
 
         // Remove projectile from edges of the screen
-        if(projectile.y + projectile.radius < 0) {
+        if(projectile.y + projectile.dim < 0) {
             setTimeout(() => {
                 projectiles.splice(i, 1);
             }, 0); 
@@ -279,7 +290,7 @@ function animate() {
 
         // Collision detection (player and enemy) - Game over
         let dist = Math.hypot(player.x - enemy.x, player.y - enemy.y); 
-        if( dist - (enemy.radius) <= 0 ||  
+        if( dist - (enemy.dim) <= 0 ||  
             ( (enemy.y > player.y) && (enemy.x > player.x - player.w/4)  && (enemy.x < player.x + player.w/4) ) ) {
             $(`#${enemy.id}`).remove();
             cancelAnimationFrame(animationId);
@@ -295,15 +306,15 @@ function animate() {
             let dist = Math.hypot(projectile.x - enemy.x, projectile.y - enemy.y);
             
             // Collision detection (projectile and enemy)
-            if(dist - (enemy.radius + projectile.radius) < 1) {
+            if(dist - (enemy.dim + projectile.dim) < 1) {
 
                 // Shrink if big enough
-                if(enemy.radius - 20 > 10 ) {
-                    updateScore(scoreElement, Math.round(3*enemy.radius));
+                if(enemy.dim - 20 > 10 ) {
+                    updateScore(scoreElement, Math.round(3*enemy.dim));
 
                     // Interpolate
                     gsap.to(enemy, {
-                        radius: enemy.radius - 15
+                        dim: enemy.dim - 15
                     });
 
                     setTimeout(() => { 
@@ -312,11 +323,11 @@ function animate() {
                 }
                 // Remove from scene
                 else {
-                    updateScore(scoreElement, Math.round(15*enemy.radius));
+                    updateScore(scoreElement, Math.round(15*enemy.dim));
                     $(`#${enemy.id}`).remove(); 
                     setTimeout(() => {
                         // Explosion effect
-                        for(let i=0; i < enemy.radius * numParticlesRatio; i++) {
+                        for(let i=0; i < enemy.dim * numParticlesRatio; i++) {
                             spawnParticles(projectile.x, projectile.y, enemy.color);
                         }               
                         enemies.splice(i, 1);
@@ -327,7 +338,7 @@ function animate() {
         }
 
         // Remove enemy from edges of the screen - Game over
-        if(enemy.y + enemy.radius > cnv.height) {
+        if(enemy.y + enemy.dim > cnv.height) {
             $(`#${enemy.id}`).remove();
             cancelAnimationFrame(animationId);
             updateScore(lastScoreElement, 0);
@@ -335,27 +346,3 @@ function animate() {
         }
     }    
 }
-
-// function loop(timeNow) {
-//     // Call next frame
-//     requestAnimationFrame(loop);
-
-//     if(timeNow) {
-//         const cnv = document.querySelector('canvas');
-//         const c = cnv.getContext('2d'); // Context
-    
-//         // Calculate Time Difference
-//         timeDelta = timeNow - timeLast;
-//         timeLast = timeNow;
-    
-//         // Cleans background
-//         c.fillStyle = 'rgba(0, 0, 0)'; 
-//         c.fillRect(0, 0, cnv.width, cnv.height);
-    
-//         // Draw and update stars
-//         c.fillStyle = "white";
-//         for (let i = 0; i < N_STARS; i++) {
-//             stars[i].update(cnv);
-//         }
-//     }
-// }

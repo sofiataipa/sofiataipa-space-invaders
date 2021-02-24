@@ -1,15 +1,12 @@
 // Projectile
-class Projectile {
+class Projectile extends MovingObject {
     constructor(x, y, radius, color, velocity) {
-        this.x = x;
-        this.y = y;
-        this.radius = radius;
-        this.color = color;
-        this.velocity = velocity;
+        super(x, y, radius, color, velocity);
+
         this.pastY = [];
         this.image = new Image;
-        this.image.src = './assets/Logo 5.png';
-        this.w = this.radius * 0.7
+        this.image.src = './assets/fire.png';
+        this.w = this.dim * 1.5
     }
 
     draw(cnv) {
@@ -25,7 +22,7 @@ class Projectile {
                 let g = rgb[1];
                 let b = rgb[2];
                 c.fillStyle = `rgba(${r},${g},${b}, ${a})`;
-                c.arc(this.x, this.pastY[i], this.radius, 0, Math.PI*2, false); 
+                c.arc(this.x, this.pastY[i], this.dim, 0, Math.PI*2, false); 
                 a -= 0.08;
                 c.fill();
             }
@@ -37,11 +34,12 @@ class Projectile {
 
         c.beginPath();
 
-        c.arc(this.x, this.y, this.radius, 0, Math.PI*2, false);
+        c.arc(this.x, this.y, this.dim, 0, Math.PI*2, false);
         c.fillStyle = this.color;
         c.fill();
 
         c.drawImage(this.image, this.x-this.w, this.y-this.w, this.w*2, this.w*2);
+        
         // Create a trail effect
         c.closePath();
         
