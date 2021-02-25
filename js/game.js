@@ -44,6 +44,10 @@ const MIN_STAR_SIZE = 2;
 const STAR_INI_SPEED = 0.2;
 const STAR_COLOR = "rgb(255, 255, 255)";
 
+// Sound
+const laserSound = new Audio('../assets/laser.wav');
+const buttonClickSound = new Audio('../assets/buttonClick.wav');
+
 function main() { 
     // Game setup (Canvas)
     const cnv = document.getElementById('game');
@@ -95,6 +99,7 @@ function main() {
 }
 
 function initGame(cnv) { 
+    buttonClickSound.play();
     // Player variables
     let playerW = parseFloat(playerElement.css('width'));
     let playerH = parseFloat(playerElement.css('height'));
@@ -308,7 +313,7 @@ function animate() {
             
             // Collision detection (projectile and enemy)
             if(dist - (enemy.dim + projectile.dim) < 1) {
-
+                laserSound.play();
                 // Shrink if big enough
                 if(enemy.dim - 20 > 10 ) {
                     updateScore(scoreElement, Math.round(3*enemy.dim));
