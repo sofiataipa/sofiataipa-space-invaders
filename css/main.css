@@ -37,15 +37,31 @@ img {
 #player {
   height: 80px;
   position: absolute;
-  animation: rocket 0.2s ease-in-out infinite;
+  /* animation: rocket 0.2s ease-in-out infinite; */
+
+    -webkit-animation: rocket 0.2s ease-in-out;
+    -moz-animation: rocket 0.2s ease-in-out;
+    -o-animation: rocket 0.2s ease-in-out;
+    animation: rocket 0.2s ease-in-out;
+
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation-iteration-count: infinite;
+    -o-animation-iteration-count: infinite;
+    animation-iteration-count: infinite;
 }
 
 @keyframes rocket {
     0%, 100% {
-        transform: translateY(-2px);
+        -webkit-transform: translateY(-1.5px);
+        -moz-transform: translateY(-1.5px);
+        -o-transform: translateY(-1.5px);
+        transform: translateY(-1.5px);
     }
     50% {
-        transform: translateY(2px);
+        -webkit-transform: translateY(1.5px);
+        -moz-transform: translateY(1.5px);
+        -o-transform: translateY(1.5px);
+        transform: translateY(1.5px);
     }
 }
 
