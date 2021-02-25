@@ -37,15 +37,15 @@ img {
 #player {
   height: 80px;
   position: absolute;
-  animation: rocket 0.2s ease infinite;
+  animation: rocket 0.2s ease-in-out infinite;
 }
 
 @keyframes rocket {
     0%, 100% {
-        transform: translateY(-1px);
+        transform: translateY(-2px);
     }
     50% {
-        transform: translateY(1px);
+        transform: translateY(2px);
     }
 }
 
