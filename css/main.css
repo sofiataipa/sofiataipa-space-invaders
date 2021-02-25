@@ -1,7 +1,7 @@
 body {
     margin: 0;
     font-family: 'Montserrat', sans-serif; 
-    background: black; 
+    background: rgb(20, 20, 20); 
     overflow: hidden;
 }
 
@@ -23,7 +23,6 @@ button {
 
 img {
     pointer-events: none;
-    /* user-drag: none;  */
     user-select: none;
     -moz-user-select: none;
     -webkit-user-drag: none;
@@ -38,9 +37,6 @@ img {
 #player {
   height: 80px;
   position: absolute;
-  /* margin-top: -50px;
-  margin-left: -50px; */
-
   animation: rocket 0.2s ease infinite;
 }
 
@@ -54,10 +50,7 @@ img {
 }
 
 .palavra {
-    /* height: 100px; */
     position: fixed;
-    /* margin-top: -50px;
-    margin-left: -50px; */
     font-size: 10px;
     z-index: 1;
   }
@@ -78,9 +71,7 @@ img {
 
 #container {
     height: 83px;
-    background-color:rgba(255,255,255,0.03); 
-    /* background: rgb(71, 177, 193); */
-    /* background: #466469 */
+    background-color:rgba(255,255,255,0.01); 
     z-index: 2;
 }
 

@@ -11,7 +11,7 @@ class Star extends MovingObject {
         grad.addColorStop(0, "#99C5FF");
         grad.addColorStop(1, "#9334AD");
 
-        c.globalAlpha = 0.5;
+        c.globalAlpha = 0.35;
         c.fillStyle = grad;
         c.beginPath();
         c.arc(this.x, this.y, this.dim, 0, Math.PI*2);
@@ -22,7 +22,7 @@ class Star extends MovingObject {
         c.strokeStyle = grad;
         c.lineWidth = this.dim * 1.5;
         c.moveTo(this.x, this.y)
-        c.lineTo(this.x, this.y - this.dim * this.velocity * 2);
+        c.lineTo(this.x, this.y - this.dim * this.velocity * 3);
         c.stroke();
         c.closePath();
 
@@ -33,7 +33,7 @@ class Star extends MovingObject {
         this.draw(cnv);
         this.y += this.velocity;
 
-        if(this.y > cnv.height + this.dim) {
+        if(this.y > cnv.height + this.dim * this.velocity * 3) {
             this.y = this.dim; // Reposition if left the screen
         }
     }

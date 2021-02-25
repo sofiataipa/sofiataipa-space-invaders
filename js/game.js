@@ -38,7 +38,7 @@ let modalElement;
 let playerElement;
 
 // Star Background
-const N_STARS = 100;
+const N_STARS = 80;
 const MAX_STAR_SIZE = 0.7;
 const MIN_STAR_SIZE = 2;
 const STAR_INI_SPEED = 0.2;
@@ -246,7 +246,7 @@ function animate() {
     }  
     
     // Cleans background
-    c.fillStyle = 'rgba(0, 0, 0)'; 
+    c.fillStyle = 'rgb(20, 20, 20)'; 
     c.fillRect(0, 0, cnv.width, cnv.height);
     
     updateLevel();
